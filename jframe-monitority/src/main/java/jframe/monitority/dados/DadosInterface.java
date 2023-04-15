@@ -1,4 +1,3 @@
-
 package jframe.monitority.dados;
 
 import com.github.britooo.looca.api.core.Looca;
@@ -6,31 +5,80 @@ import com.github.britooo.looca.api.group.sistema.Sistema;
 import com.github.britooo.looca.api.group.memoria.Memoria;
 import com.github.britooo.looca.api.group.processador.Processador;
 import com.github.britooo.looca.api.group.discos.DiscoGrupo;
+import com.github.britooo.looca.api.group.rede.Rede;
+import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DadosInterface extends javax.swing.JFrame {
 
-   Looca looca;
-   
+    Looca looca;
+
     public DadosInterface() {
         initComponents();
         this.setResizable(false);
         this.looca = new Looca();
         this.setUpOs();
     }
-    
-    private void setUpOs() {
-    Sistema sistema = looca.getSistema();
-    Memoria memoria = looca.getMemoria();
-    Processador processador = looca.getProcessador();
-    DiscoGrupo discoGrupo = looca.getGrupoDeDiscos();
-    //discoGrupo.getTamanhoTotal() / 1073741824 ));
-    //memoria.getTotal() / 1000000000));
-    
-    
- 
-  }
 
-   
+    private void setUpOs() {
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Sistema sistema = looca.getSistema();
+
+                // Dados que vamos receber dos seguintes Objetos:
+                Memoria memoriaRam = looca.getMemoria();
+                Processador processadorCpu = looca.getProcessador();
+                ProcessoGrupo processosCpu = looca.getGrupoDeProcessos();
+                DiscoGrupo discoGrupo = looca.getGrupoDeDiscos();
+                Rede rede = looca.getRede();
+                //discoGrupo.getTamanhoTotal() / 1073741824 ));
+                //memoria.getTotal() / 1000000000));
+
+                // Cpu
+                lblPorcCpuValue.setText(String.format("▶ %s",
+                        processadorCpu.getUso()));
+                lblHzCpuValue.setText(String.format("▶ %s hz",
+                        processadorCpu.getFrequencia()));
+                lblProcessosCpuValue.setText(String.format("▶ %s",
+                        processosCpu.getTotalProcessos()));
+                lblThreadsCpuValue.setText(String.format("▶ %s",
+                        processosCpu.getTotalThreads()));
+
+                // Memória
+                lblTotalMemoriaRamValue.setText(String.format("▶ %s",
+                        memoriaRam.getTotal() / 1000000000));
+                lblDisponivelMemoriaRamValue.setText(String.format("▶ %s",
+                        memoriaRam.getDisponivel() / 1000000000));
+                lblEmUsoMemoriaValueValue.setText(String.format("▶ %s",
+                        memoriaRam.getEmUso() / 1000000000));
+
+                // Disco
+                lblTamanhoDiscoValue.setText(String.format("▶ %s GB",
+                        discoGrupo.getTamanhoTotal()/ 1073741824));
+                lblLeituraDiscoValue.setText(String.format("▶ %s",
+                        discoGrupo.getDiscos().get(0).getLeituras()));
+                lblEscritaDiscoValue.setText(String.format("▶ %s",
+                        discoGrupo.getDiscos().get(0).getEscritas()));
+                lblTempoTransferenciaDiscoValue.setText(String.format("▶ %s",
+                        discoGrupo.getDiscos().get(0).getTempoDeTransferencia()));
+
+                // Rede
+                lblNomeRedeValue.setText(String.format("▶ %s",
+                        rede.getGrupoDeInterfaces().getInterfaces().get(1).getNome()));
+                lblHostnameRedeValue.setText(String.format("▶ %s",
+                        rede.getParametros().getHostName()));
+                lblNomeDominioRedeValue.setText(String.format("▶ %s",
+                        rede.getParametros().getNomeDeDominio()));
+                lblServidoresRedeValue.setText(String.format("▶ %s",
+                        rede.getParametros().getServidoresDns()));
+            }
+        }, 0, 1000);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -46,26 +94,36 @@ public class DadosInterface extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         lblPorcCpuValue = new javax.swing.JLabel();
         lblHzCpuValue = new javax.swing.JLabel();
-        lblProcesValue = new javax.swing.JLabel();
-        lblThreadsValue = new javax.swing.JLabel();
+        lblProcessosCpuValue = new javax.swing.JLabel();
+        lblThreadsCpuValue = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
+        lblTamanhoDiscoValue = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        lblLeituraDiscoValue = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        lblEscritaDiscoValue = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        lblTempoTransferenciaDiscoValue = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
+        lblTotalMemoriaRamValue = new javax.swing.JLabel();
+        lblDisponivelMemoriaRamValue = new javax.swing.JLabel();
+        lblEmUsoMemoriaValueValue = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
+        lblNomeRedeValue = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        lblHostnameRedeValue = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        lblNomeDominioRedeValue = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        lblServidoresRedeValue = new javax.swing.JLabel();
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setName(""); // NOI18N
@@ -135,13 +193,13 @@ public class DadosInterface extends javax.swing.JFrame {
         lblHzCpuValue.setForeground(new java.awt.Color(10, 10, 10));
         lblHzCpuValue.setText("--");
 
-        lblProcesValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
-        lblProcesValue.setForeground(new java.awt.Color(10, 10, 10));
-        lblProcesValue.setText("--");
+        lblProcessosCpuValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblProcessosCpuValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblProcessosCpuValue.setText("--");
 
-        lblThreadsValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
-        lblThreadsValue.setForeground(new java.awt.Color(10, 10, 10));
-        lblThreadsValue.setText("--");
+        lblThreadsCpuValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblThreadsCpuValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblThreadsCpuValue.setText("--");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -161,8 +219,8 @@ public class DadosInterface extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addComponent(lblPorcCpuValue)
                             .addComponent(lblHzCpuValue)
-                            .addComponent(lblProcesValue)
-                            .addComponent(lblThreadsValue))))
+                            .addComponent(lblProcessosCpuValue)
+                            .addComponent(lblThreadsCpuValue))))
                 .addContainerGap(185, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -178,15 +236,15 @@ public class DadosInterface extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHzCpuValue)
-                .addGap(4, 4, 4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblProcesValue)
-                .addGap(3, 3, 3)
+                .addComponent(lblProcessosCpuValue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblThreadsValue)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lblThreadsCpuValue)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -200,11 +258,35 @@ public class DadosInterface extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(87, 87, 87));
-        jLabel13.setText("Utilização:");
+        jLabel13.setText("Tamanho:");
 
-        jLabel24.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
-        jLabel24.setForeground(new java.awt.Color(10, 10, 10));
-        jLabel24.setText("--");
+        lblTamanhoDiscoValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblTamanhoDiscoValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblTamanhoDiscoValue.setText("--");
+
+        jLabel25.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(87, 87, 87));
+        jLabel25.setText("Leitura disco:");
+
+        lblLeituraDiscoValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblLeituraDiscoValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblLeituraDiscoValue.setText("--");
+
+        jLabel27.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
+        jLabel27.setForeground(new java.awt.Color(87, 87, 87));
+        jLabel27.setText("Escrita disco:");
+
+        lblEscritaDiscoValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblEscritaDiscoValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblEscritaDiscoValue.setText("--");
+
+        jLabel29.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(87, 87, 87));
+        jLabel29.setText("Tempo de transferencia:");
+
+        lblTempoTransferenciaDiscoValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblTempoTransferenciaDiscoValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblTempoTransferenciaDiscoValue.setText("--");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -218,8 +300,14 @@ public class DadosInterface extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel13))))
+                            .addComponent(lblTamanhoDiscoValue)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel25)
+                            .addComponent(lblLeituraDiscoValue)
+                            .addComponent(jLabel27)
+                            .addComponent(lblEscritaDiscoValue)
+                            .addComponent(jLabel29)
+                            .addComponent(lblTempoTransferenciaDiscoValue))))
                 .addContainerGap(178, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -230,8 +318,20 @@ public class DadosInterface extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel24)
-                .addContainerGap(160, Short.MAX_VALUE))
+                .addComponent(lblTamanhoDiscoValue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel25)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblLeituraDiscoValue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblEscritaDiscoValue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblTempoTransferenciaDiscoValue)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
@@ -245,35 +345,27 @@ public class DadosInterface extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(87, 87, 87));
-        jLabel14.setText("Utilização:");
+        jLabel14.setText("Total:");
 
         jLabel16.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(87, 87, 87));
-        jLabel16.setText("Velocidade:");
+        jLabel16.setText("Disponivel:");
 
         jLabel17.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(87, 87, 87));
-        jLabel17.setText("Velocidade:");
+        jLabel17.setText("Em uso:");
 
-        jLabel18.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
-        jLabel18.setForeground(new java.awt.Color(87, 87, 87));
-        jLabel18.setText("Velocidade:");
+        lblTotalMemoriaRamValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblTotalMemoriaRamValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblTotalMemoriaRamValue.setText("--");
 
-        jLabel19.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(10, 10, 10));
-        jLabel19.setText("--");
+        lblDisponivelMemoriaRamValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblDisponivelMemoriaRamValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblDisponivelMemoriaRamValue.setText("--");
 
-        jLabel20.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
-        jLabel20.setForeground(new java.awt.Color(10, 10, 10));
-        jLabel20.setText("--");
-
-        jLabel21.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(10, 10, 10));
-        jLabel21.setText("--");
-
-        jLabel22.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(10, 10, 10));
-        jLabel22.setText("--");
+        lblEmUsoMemoriaValueValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblEmUsoMemoriaValueValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblEmUsoMemoriaValueValue.setText("--");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -286,15 +378,12 @@ public class DadosInterface extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel22)
-                    .addComponent(jLabel21)
-                    .addComponent(jLabel20)
-                    .addComponent(jLabel19)
-                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel17)
-                        .addComponent(jLabel18)
-                        .addComponent(jLabel16)
-                        .addComponent(jLabel14)))
+                    .addComponent(jLabel17)
+                    .addComponent(jLabel16)
+                    .addComponent(jLabel14)
+                    .addComponent(lblEmUsoMemoriaValueValue)
+                    .addComponent(lblDisponivelMemoriaRamValue)
+                    .addComponent(lblTotalMemoriaRamValue))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -305,20 +394,16 @@ public class DadosInterface extends javax.swing.JFrame {
                 .addGap(11, 11, 11)
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel19)
-                .addGap(1, 1, 1)
+                .addComponent(lblTotalMemoriaRamValue)
+                .addGap(4, 4, 4)
                 .addComponent(jLabel16)
-                .addGap(9, 9, 9)
-                .addComponent(jLabel20)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel17)
+                .addComponent(lblDisponivelMemoriaRamValue)
                 .addGap(5, 5, 5)
-                .addComponent(jLabel21)
+                .addComponent(jLabel17)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel18)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel22)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addComponent(lblEmUsoMemoriaValueValue)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
@@ -333,25 +418,55 @@ public class DadosInterface extends javax.swing.JFrame {
 
         jLabel15.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(87, 87, 87));
-        jLabel15.setText("Utilização:");
+        jLabel15.setText("Nome de rede:");
 
-        jLabel23.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(10, 10, 10));
-        jLabel23.setText("--");
+        lblNomeRedeValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblNomeRedeValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblNomeRedeValue.setText("--");
+
+        jLabel18.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(87, 87, 87));
+        jLabel18.setText("Nome de domínio:");
+
+        lblHostnameRedeValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblHostnameRedeValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblHostnameRedeValue.setText("--");
+
+        jLabel19.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(87, 87, 87));
+        jLabel19.setText("Hostname:");
+
+        lblNomeDominioRedeValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblNomeDominioRedeValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblNomeDominioRedeValue.setText("--");
+
+        jLabel20.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(87, 87, 87));
+        jLabel20.setText("Servidores DNS/IPv4:");
+
+        lblServidoresRedeValue.setFont(new java.awt.Font("Monospaced", 1, 12)); // NOI18N
+        lblServidoresRedeValue.setForeground(new java.awt.Color(10, 10, 10));
+        lblServidoresRedeValue.setText("--");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(182, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(170, 170, 170))
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel23)
-                    .addComponent(jLabel15))
+                    .addComponent(lblServidoresRedeValue)
+                    .addComponent(jLabel20)
+                    .addComponent(lblNomeDominioRedeValue)
+                    .addComponent(jLabel18)
+                    .addComponent(lblHostnameRedeValue)
+                    .addComponent(lblNomeRedeValue)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel19))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
@@ -362,8 +477,20 @@ public class DadosInterface extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel23)
-                .addContainerGap(160, Short.MAX_VALUE))
+                .addComponent(lblNomeRedeValue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblHostnameRedeValue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblNomeDominioRedeValue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblServidoresRedeValue)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -411,9 +538,8 @@ public class DadosInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-  
     public static void main(String args[]) {
-     
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new DadosInterface().setVisible(true);
@@ -432,10 +558,9 @@ public class DadosInterface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -449,9 +574,20 @@ public class DadosInterface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JLabel lblDisponivelMemoriaRamValue;
+    private javax.swing.JLabel lblEmUsoMemoriaValueValue;
+    private javax.swing.JLabel lblEscritaDiscoValue;
+    private javax.swing.JLabel lblHostnameRedeValue;
     private javax.swing.JLabel lblHzCpuValue;
+    private javax.swing.JLabel lblLeituraDiscoValue;
+    private javax.swing.JLabel lblNomeDominioRedeValue;
+    private javax.swing.JLabel lblNomeRedeValue;
     private javax.swing.JLabel lblPorcCpuValue;
-    private javax.swing.JLabel lblProcesValue;
-    private javax.swing.JLabel lblThreadsValue;
+    private javax.swing.JLabel lblProcessosCpuValue;
+    private javax.swing.JLabel lblServidoresRedeValue;
+    private javax.swing.JLabel lblTamanhoDiscoValue;
+    private javax.swing.JLabel lblTempoTransferenciaDiscoValue;
+    private javax.swing.JLabel lblThreadsCpuValue;
+    private javax.swing.JLabel lblTotalMemoriaRamValue;
     // End of variables declaration//GEN-END:variables
 }
