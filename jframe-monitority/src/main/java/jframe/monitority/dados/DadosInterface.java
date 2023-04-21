@@ -8,6 +8,7 @@ import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
 
+import classes.tabelas.Dados;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,7 +40,7 @@ public class DadosInterface extends javax.swing.JFrame {
                 //memoria.getTotal() / 1000000000));
 
                 // Cpu
-                lblPorcCpuValue.setText(String.format("▶ %s",
+                lblPorcCpuValue.setText(String.format("▶ %s'%'",
                         processadorCpu.getUso()));
                 lblHzCpuValue.setText(String.format("▶ %s hz",
                         processadorCpu.getFrequencia()));
@@ -49,11 +50,11 @@ public class DadosInterface extends javax.swing.JFrame {
                         processosCpu.getTotalThreads()));
 
                 // Memória
-                lblTotalMemoriaRamValue.setText(String.format("▶ %s",
+                lblTotalMemoriaRamValue.setText(String.format("▶ %s GB",
                         memoriaRam.getTotal() / 1000000000));
-                lblDisponivelMemoriaRamValue.setText(String.format("▶ %s",
+                lblDisponivelMemoriaRamValue.setText(String.format("▶ %s GB",
                         memoriaRam.getDisponivel() / 1000000000));
-                lblEmUsoMemoriaValueValue.setText(String.format("▶ %s",
+                lblEmUsoMemoriaValueValue.setText(String.format("▶ %s GB",
                         memoriaRam.getEmUso() / 1000000000));
 
                 // Disco
