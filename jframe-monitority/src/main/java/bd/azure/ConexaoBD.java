@@ -6,6 +6,7 @@ package bd.azure;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import java.sql.Connection;
 
 /**
  *
@@ -19,13 +20,15 @@ public class ConexaoBD {
 
         BasicDataSource dataSource = new BasicDataSource();
 
-        dataSource​.setDriverClassName("org.h2.Driver");
+        dataSource​.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-        dataSource​.setUrl("jdbc:h2:file:./banco_teste");
 
-        dataSource​.setUsername("sa");
+        dataSource​.setUrl("jdbc:sqlserver://svr-projeto-monitority.database.windows.net:1433;database=bd-projeto-monitority;encryp\n" +
+"t=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;");
 
-        dataSource​.setPassword("");
+        dataSource​.setUsername("admin-projeto-monitority");
+
+        dataSource​.setPassword("#Gfgrupo9");
 
         this.conexaoDoBanco = new JdbcTemplate(dataSource);
 

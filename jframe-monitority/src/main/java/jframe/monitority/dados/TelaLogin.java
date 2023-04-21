@@ -3,8 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package jframe.monitority.dados;
+import java.sql.Connection;
+import jframe.monitority.dados.DadosInterface;
 
 import java.util.List;
+
 import bd.azure.ConexaoBD;
 import classes.tabelas.Empresa;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -17,10 +20,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class TelaLogin extends javax.swing.JFrame {
 
-      ConexaoBD conexaoBD = new ConexaoBD();
-      JdbcTemplate con = conexaoBD.getConexaoDoBanco();
+      private ConexaoBD conexaoBD = new ConexaoBD();
+      private JdbcTemplate con = conexaoBD.getConexaoDoBanco();
     
-    
+      private Boolean cadastroConfirmado;
+      
     public TelaLogin() {
         initComponents(); 
     }
@@ -42,11 +46,11 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtEmailValue = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtSenhaValue = new javax.swing.JTextField();
         btnLogin = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         lblAvisoValue = new javax.swing.JLabel();
+        txtSenhaValue = new javax.swing.JPasswordField();
         jPanel7 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -102,13 +106,6 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("E-mail:");
 
-        txtSenhaValue.setBackground(new java.awt.Color(204, 204, 204));
-        txtSenhaValue.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSenhaValueActionPerformed(evt);
-            }
-        });
-
         btnLogin.setBackground(new java.awt.Color(204, 204, 204));
         btnLogin.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
         btnLogin.setForeground(new java.awt.Color(0, 0, 0));
@@ -138,6 +135,8 @@ public class TelaLogin extends javax.swing.JFrame {
         lblAvisoValue.setForeground(new java.awt.Color(255, 0, 0));
         lblAvisoValue.setText(" ");
 
+        txtSenhaValue.setBackground(new java.awt.Color(204, 204, 204));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -146,7 +145,7 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addContainerGap(216, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
@@ -164,11 +163,13 @@ public class TelaLogin extends javax.swing.JFrame {
                         .addGap(173, 173, 173))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(lblAvisoValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtSenhaValue, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(70, 70, 70)
+                                .addComponent(lblAvisoValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEmailValue, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(txtEmailValue, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSenhaValue, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGap(65, 65, 65))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -188,8 +189,8 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addGap(52, 52, 52)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSenhaValue, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtSenhaValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
                 .addComponent(lblAvisoValue, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
@@ -217,7 +218,7 @@ public class TelaLogin extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 458, Short.MAX_VALUE)
+                .addGap(0, 388, Short.MAX_VALUE)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -246,10 +247,6 @@ public class TelaLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEmailValueActionPerformed
 
-    private void txtSenhaValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaValueActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSenhaValueActionPerformed
-
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String email = txtEmailValue.getText();
         String senha = txtSenhaValue.getText();
@@ -257,17 +254,19 @@ public class TelaLogin extends javax.swing.JFrame {
         if(email.length() == 0 && senha.length() == 0) {
             System.out.println("Senha ou E-mail inválidos");
         } else {
-  
-            List<Empresa> usuarioLogado = con.query("Select * From empresa",
-                    new BeanPropertyRowMapper<>(Empresa.class));
+            List<Empresa> empresas = con.query("select * from [dbo].[empresa]", 
+                new BeanPropertyRowMapper<>(Empresa.class));
             
-            for (Empresa empresa : usuarioLogado) {
+            for (Empresa empresa : empresas) {
                 if(empresa.getEmail().equals(email) && empresa.getSenha().equals(senha)) {
                    System.out.println("Esta logado");
-                } else {
-                    System.out.println("Quase logado");
-                }
+                   
+                        new TelaLogin().setVisible(false);
+                        new DadosInterface().setVisible(true);
+                   return;
+                } 
             }
+            System.out.println("Login não encontrado");
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -301,8 +300,10 @@ public class TelaLogin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaLogin().setVisible(true);
-                new DadosInterface().setVisible(false);
+                
+                     new TelaLogin().setVisible(true);
+                     new DadosInterface().setVisible(false);
+                     
             }
         });
     }
@@ -321,6 +322,6 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JLabel lblAvisoValue;
     private javax.swing.JTextField txtEmailValue;
-    private javax.swing.JTextField txtSenhaValue;
+    private javax.swing.JPasswordField txtSenhaValue;
     // End of variables declaration//GEN-END:variables
 }

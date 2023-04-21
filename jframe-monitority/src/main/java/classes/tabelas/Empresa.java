@@ -18,17 +18,6 @@ public class Empresa {
     private String contato;
     private Integer fkEndereco;
 
-    public Empresa(Integer idEmpresa, String nomeUsuario, String nomeEmpresa, String cnpj, String email, String senha, String contato, Integer fkEndereco) {
-        this.idEmpresa = idEmpresa;
-        this.nomeUsuario = nomeUsuario;
-        this.nomeEmpresa = nomeEmpresa;
-        this.cnpj = cnpj;
-        this.email = email;
-        this.senha = senha;
-        this.contato = contato;
-        this.fkEndereco = fkEndereco;
-    }
-    
     public Integer getIdEmpresa() {
         return idEmpresa;
     }
@@ -92,12 +81,6 @@ public class Empresa {
     public void setFkEndereco(Integer fkEndereco) {
         this.fkEndereco = fkEndereco;
     }
-
-    @Override
-    public String toString() {
-        return "Empresa{" + "idEmpresa=" + idEmpresa + ", nomeUsuario=" + nomeUsuario + ", nomeEmpresa=" + nomeEmpresa + ", cnpj=" + cnpj + ", email=" + email + ", senha=" + senha + ", contato=" + contato + ", fkEndereco=" + fkEndereco + '}';
-    }
-    
     
                         
 }
