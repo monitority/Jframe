@@ -8,7 +8,6 @@ import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
 
-import classes.tabelas.Dados;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,7 +17,6 @@ public class DadosInterface extends javax.swing.JFrame {
 
     public DadosInterface() {
         initComponents();
-        this.setResizable(false);
         this.looca = new Looca();
         this.setUpOs();
     }
@@ -40,7 +38,7 @@ public class DadosInterface extends javax.swing.JFrame {
                 //memoria.getTotal() / 1000000000));
 
                 // Cpu
-                lblPorcCpuValue.setText(String.format("▶ %s'%'",
+                lblPorcCpuValue.setText(String.format("▶ %s",
                         processadorCpu.getUso()));
                 lblHzCpuValue.setText(String.format("▶ %s hz",
                         processadorCpu.getFrequencia()));
@@ -77,7 +75,7 @@ public class DadosInterface extends javax.swing.JFrame {
                 lblServidoresRedeValue.setText(String.format("▶ %s",
                         rede.getParametros().getServidoresDns()));
             }
-        }, 0, 1000);
+        }, 0, 3000);
     }
 
     @SuppressWarnings("unchecked")
@@ -541,10 +539,8 @@ public class DadosInterface extends javax.swing.JFrame {
 
     public static void main(String args[]) {
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new DadosInterface().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new DadosInterface().setVisible(true);
         });
     }
 
