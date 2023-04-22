@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package jframe.monitority.dados;
+
 import java.sql.Connection;
 import jframe.monitority.dados.DadosInterface;
 
@@ -13,20 +14,20 @@ import classes.tabelas.Empresa;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-
 /**
  *
  * @author Gabriel Kohatu
  */
 public class TelaLogin extends javax.swing.JFrame {
-
-      private ConexaoBD conexaoBD = new ConexaoBD();
-      private JdbcTemplate con = conexaoBD.getConexaoDoBanco();
     
-      private Boolean cadastroConfirmado;
-      
+    private final DadosInterface dadosInterface;
+
+    private ConexaoBD conexaoBD = new ConexaoBD();
+    private JdbcTemplate con = conexaoBD.getConexaoDoBanco();
+
     public TelaLogin() {
-        initComponents(); 
+        initComponents();
+        this.dadosInterface = new DadosInterface();
     }
 
     /**
@@ -248,23 +249,25 @@ public class TelaLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEmailValueActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        TelaLogin login = new TelaLogin();
+        
         String email = txtEmailValue.getText();
         String senha = txtSenhaValue.getText();
-        
-        if(email.length() == 0 && senha.length() == 0) {
+
+        if (email.length() == 0 && senha.length() == 0) {
             System.out.println("Senha ou E-mail inválidos");
         } else {
-            List<Empresa> empresas = con.query("select * from [dbo].[empresa]", 
-                new BeanPropertyRowMapper<>(Empresa.class));
-            
+            List<Empresa> empresas = con.query("select * from [dbo].[empresa]",
+                    new BeanPropertyRowMapper<>(Empresa.class));
+
             for (Empresa empresa : empresas) {
-                if(empresa.getEmail().equals(email) && empresa.getSenha().equals(senha)) {
-                   System.out.println("Esta logado");
-                   
-                        new TelaLogin().setVisible(false);
-                        new DadosInterface().setVisible(true);
-                   return;
-                } 
+                if (empresa.getEmail().equals(email) && empresa.getSenha().equals(senha)) {
+                    System.out.println("Esta logado");
+                    
+                    dadosInterface.setVisible(true);
+                    this.dispose();
+                    return;
+                }
             }
             System.out.println("Login não encontrado");
         }
@@ -274,36 +277,13 @@ public class TelaLogin extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
+    
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
-                     new TelaLogin().setVisible(true);
-                     new DadosInterface().setVisible(false);
                      
+                    new TelaLogin().setVisible(true);
+                    new DadosInterface().setVisible(false);
+
             }
         });
     }
