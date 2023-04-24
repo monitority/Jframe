@@ -36,10 +36,11 @@ public class DadosInterface extends javax.swing.JFrame {
                 Rede rede = looca.getRede();
                 //discoGrupo.getTamanhoTotal() / 1073741824 ));
                 //memoria.getTotal() / 1000000000));
-
+                
+                Double processadorPorc = processadorCpu.getUso();
                 // Cpu
-                lblPorcCpuValue.setText(String.format("▶ %s",
-                        processadorCpu.getUso()));
+                lblPorcCpuValue.setText(String.format("▶ %.2f%%",
+                        processadorPorc));
                 lblHzCpuValue.setText(String.format("▶ %s hz",
                         processadorCpu.getFrequencia()));
                 lblProcessosCpuValue.setText(String.format("▶ %s",
