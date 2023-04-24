@@ -17,7 +17,6 @@ public class DadosInterface extends javax.swing.JFrame {
 
     public DadosInterface() {
         initComponents();
-        this.setResizable(false);
         this.looca = new Looca();
         this.setUpOs();
     }
@@ -37,10 +36,11 @@ public class DadosInterface extends javax.swing.JFrame {
                 Rede rede = looca.getRede();
                 //discoGrupo.getTamanhoTotal() / 1073741824 ));
                 //memoria.getTotal() / 1000000000));
-
+                
+                Double processadorPorc = processadorCpu.getUso();
                 // Cpu
-                lblPorcCpuValue.setText(String.format("▶ %s",
-                        processadorCpu.getUso()));
+                lblPorcCpuValue.setText(String.format("▶ %.2f%%",
+                        processadorPorc));
                 lblHzCpuValue.setText(String.format("▶ %s hz",
                         processadorCpu.getFrequencia()));
                 lblProcessosCpuValue.setText(String.format("▶ %s",
@@ -49,11 +49,11 @@ public class DadosInterface extends javax.swing.JFrame {
                         processosCpu.getTotalThreads()));
 
                 // Memória
-                lblTotalMemoriaRamValue.setText(String.format("▶ %s",
+                lblTotalMemoriaRamValue.setText(String.format("▶ %s GB",
                         memoriaRam.getTotal() / 1000000000));
-                lblDisponivelMemoriaRamValue.setText(String.format("▶ %s",
+                lblDisponivelMemoriaRamValue.setText(String.format("▶ %s GB",
                         memoriaRam.getDisponivel() / 1000000000));
-                lblEmUsoMemoriaValueValue.setText(String.format("▶ %s",
+                lblEmUsoMemoriaValueValue.setText(String.format("▶ %s GB",
                         memoriaRam.getEmUso() / 1000000000));
 
                 // Disco
@@ -76,7 +76,7 @@ public class DadosInterface extends javax.swing.JFrame {
                 lblServidoresRedeValue.setText(String.format("▶ %s",
                         rede.getParametros().getServidoresDns()));
             }
-        }, 0, 1000);
+        }, 0, 3000);
     }
 
     @SuppressWarnings("unchecked")
@@ -540,10 +540,8 @@ public class DadosInterface extends javax.swing.JFrame {
 
     public static void main(String args[]) {
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new DadosInterface().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new DadosInterface().setVisible(true);
         });
     }
 
