@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package bd.azure;
+package bd.java;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,11 +12,11 @@ import java.sql.Connection;
  *
  * @author Gabriel Kohatu
  */
-public class ConexaoBD {
+public class ConexaoBDAzure {
     
     private JdbcTemplate conexaoDoBanco;
     
-    public ConexaoBD() {
+    public ConexaoBDAzure() {
 
         BasicDataSource dataSource = new BasicDataSource();
 
@@ -34,7 +34,7 @@ public class ConexaoBD {
 
     }
 
-    public JdbcTemplate getConexaoDoBanco() {
+    public JdbcTemplate getConexaoDoBancoAzure() {
 
         return conexaoDoBanco;
 

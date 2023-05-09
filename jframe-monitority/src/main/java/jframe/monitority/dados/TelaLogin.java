@@ -5,14 +5,15 @@
 package jframe.monitority.dados;
 
 import java.sql.Connection;
-import jframe.monitority.dados.DadosInterface;
-
 import java.util.List;
 
-import bd.azure.ConexaoBD;
-import classes.tabelas.Empresa;
+import bd.java.ConexaoBDAzure;
+
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import classes.tabelas.Empresa;
+import jframe.monitority.dados.DadosInterface;
 
 /**
  *
@@ -22,8 +23,10 @@ public class TelaLogin extends javax.swing.JFrame {
     
     private final DadosInterface dadosInterface;
 
-    private ConexaoBD conexaoBD = new ConexaoBD();
-    private JdbcTemplate con = conexaoBD.getConexaoDoBanco();
+    private ConexaoBDAzure conexaoBDAzure = new ConexaoBDAzure();
+    private JdbcTemplate conAzure = conexaoBDAzure.getConexaoDoBancoAzure();
+   
+
 
     public TelaLogin() {
         initComponents();
@@ -187,9 +190,9 @@ public class TelaLogin extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel7))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -275,7 +278,7 @@ public class TelaLogin extends javax.swing.JFrame {
         if (email.length() == 0 && senha.length() == 0) {
             System.out.println("Senha ou E-mail inválidos");
         } else {
-            List<Empresa> empresas = con.query("select * from [dbo].[empresa]",
+            List<Empresa> empresas = conAzure.query("select * from [dbo].[empresa]",
                 new BeanPropertyRowMapper<>(Empresa.class));
 
             for (Empresa empresa : empresas) {
