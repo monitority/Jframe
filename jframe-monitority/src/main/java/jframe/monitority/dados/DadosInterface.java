@@ -212,24 +212,23 @@ public class DadosInterface extends javax.swing.JFrame {
                         );
                     conAzure.update(dataAzure);
                     
-                    conMysql.execute("create table Dados(\n" +
-                    "    id int primary key auto_increment,\n" +
-                    "    processadorPorc Varchar(45),\n" +
-                    "    cpuhz Varchar(45),\n" +
-                    "    totalProcessos int ,\n" +
-                    "    threadsCpu int,\n" +
-                    "    memoriaTotal Varchar(45),\n" +
-                    "    memoriaDisponivel Varchar(45),\n" +
-                    "    memoriaEmUso Varchar(45),\n" +
-                    "    TamanhoDisco Varchar(45),\n" +
-                    "    LeituraDisco Varchar(45),\n" +
-                    "    EscritaDisco Varchar(45),\n" +
-                    "    TempoTransferencia Varchar(45),\n" +
-                    "    NomeRede Varchar(45),\n" +
-                    "    Hostname Varchar(45),\n" +
-                    "    NomeDeDominio Varchar(45)\n" +
-                    ");");
-                
+//                    CREATE TABLE Dados( 
+//                        id int primary key auto_increment,
+//                        processadorPorc Varchar(45),
+//                        cpuhz Varchar(45),
+//                        totalProcessos int ,
+//                        threadsCpu int,
+//                        memoriaTotal Varchar(45),
+//                        memoriaDisponivel Varchar(45),
+//                        memoriaEmUso Varchar(45),
+//                        TamanhoDisco Varchar(45),
+//                        LeituraDisco Varchar(45),
+//                        EscritaDisco Varchar(45),
+//                        TempoTransferencia Varchar(45),
+//                        NomeRede Varchar(45),
+//                        Hostname Varchar(45),
+//                        NomeDeDominio Varchar(45)
+//                    );        
                 
                 String dataSql = String.format("Insert into Dados("
                         + "processadorPorc,"

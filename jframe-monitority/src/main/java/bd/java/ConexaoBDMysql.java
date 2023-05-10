@@ -19,11 +19,11 @@ public class ConexaoBDMysql {
         BasicDataSource dataSource = new BasicDataSource();
 
         dataSource​.setDriverClassName("com.mysql.cj.jdbc.Driver");
+//dataSource​.setUrl("jdbc:mysql://localhost:3306/banco1?serverTimezone=UTC")
+//jdbc:mysql://LocalHost:3306/banco1?useTimezone=true&serverTimezone=UTC
+        dataSource​.setUrl("jdbc:mysql://LocalHost:3306/banco1?useTimezone=true&serverTimezone=UTC");
 
-
-        dataSource​.setUrl("jdbc:mysql://localhost:3306/banco1?serverTimezone=UTC");
-
-        dataSource​.setUsername("ContainerBD2");
+        dataSource​.setUsername("root");
 
         dataSource​.setPassword("urubu100");
 
