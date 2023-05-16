@@ -6,3 +6,4 @@ classes\tabelas\Estabelecimento.class
 console\monitority\dados\ExecutavelInicial.class
 bd\java\ConexaoBDAzure.class
 bd\java\ConexaoBDMysql.class
+console\monitority\dados\ExecutavelInicial$1.class
