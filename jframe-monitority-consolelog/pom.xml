@@ -22,7 +22,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>consolo.monitority.dados.ExecutavelInicial</mainClass> 
+                            <mainClass>console.monitority.dados.ExecutavelInicial</mainClass> 
                         </manifest>
                     </archive>
                 </configuration>
