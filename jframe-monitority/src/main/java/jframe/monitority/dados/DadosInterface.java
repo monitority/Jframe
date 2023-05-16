@@ -26,7 +26,6 @@ import java.util.TimerTask;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-
 public class DadosInterface extends javax.swing.JFrame {
 
     Looca looca;
@@ -36,11 +35,14 @@ public class DadosInterface extends javax.swing.JFrame {
 
     private ConexaoBDMysql conexaoBDMysql = new ConexaoBDMysql();
     private JdbcTemplate conMysql = conexaoBDMysql.getConexaoDoBancoMysql();
-    
+
     public Integer idTotem = 0;
     public Integer fkEstabelecimento = 0;
     public Integer fkMetricaAviso = 0;
     public Integer fkConfigPc = 0;
+
+    public Boolean SerialNumber = false;
+
     public DadosInterface() {
         initComponents();
         this.looca = new Looca();
@@ -49,36 +51,44 @@ public class DadosInterface extends javax.swing.JFrame {
 
     private void setUpOs() {
 
-        Boolean SerialNumber = false;
         Processador processadorCpu = looca.getProcessador();
         String TotemSerial = processadorCpu.getId();
         System.out.println(TotemSerial);
 
-        List<Totem> totens = conAzure.query("select * from [dbo].[totem]",
-         new BeanPropertyRowMapper<>(Totem.class));
+        String forSelectTotem = String.format("select * from [dbo].[totem] where "
+                + "serialtotem ='%s'", TotemSerial);
+        List<Totem> totens = conAzure.query(forSelectTotem,
+                new BeanPropertyRowMapper<>(Totem.class));
 
-        for (Totem totem : totens) {
-            if (totem.getSerialTotem().equals(TotemSerial)) {
-                SerialNumber = true;
-                idTotem = totem.getIdTotem();
-                fkConfigPc = totem.getFkConfigPc();
-                fkEstabelecimento = totem.getFkEstabelecimento();
-                System.out.println(idTotem);
-                System.out.println(fkConfigPc);
-                System.out.println(fkEstabelecimento);
-                
-            } else {
-                System.out.println("Totem não encontrado!!");
-            }
+        if (SerialNumber != true) {
+            new Timer().scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
+                            idTotem = totens.get(0).getIdTotem();
+                            fkEstabelecimento = totens.get(0).getFkEstabelecimento();
+                            fkConfigPc = totens.get(0).getFkConfigPc();
+                            SerialNumber = true;
+                            String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
+                                    + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
+                            List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
+                                    new BeanPropertyRowMapper<>(Estabelecimento.class));
+                            fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
+                        }
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("Totem não listado");
+                    }
+                }
+            }, 0, 10000);
         }
-        
+
         List<Estabelecimento> estabelecimentos = conAzure.query("select * from [dbo].[estabelecimento]",
-         new BeanPropertyRowMapper<>(Estabelecimento.class));
-        
-        for (Estabelecimento estabelecimento: estabelecimentos) {
-            if(estabelecimento.getIdEstabelecimento().equals(fkEstabelecimento)) {
+                new BeanPropertyRowMapper<>(Estabelecimento.class));
+
+        for (Estabelecimento estabelecimento : estabelecimentos) {
+            if (estabelecimento.getIdEstabelecimento().equals(fkEstabelecimento)) {
                 fkMetricaAviso = estabelecimento.getFkMetricaAviso();
-                System.out.println(fkEstabelecimento);
             }
         }
 
@@ -152,66 +162,66 @@ public class DadosInterface extends javax.swing.JFrame {
                             NomeDeDominio));
                     lblServidoresRedeValue.setText(String.format("▶ %s",
                             ServidorDns));
-                    
+
                     String dataAzure = String.format("Insert into Dados("
-                        + "processadorPorc,"
-                        + "cpuhz,"
-                        + "totalProcessos,"
-                        + "threadsCpu,"
-                        + "memoriaTotal,"
-                        + "memoriaDisponivel,"
-                        + "memoriaEmUso,"
-                        + "TamanhoDisco,"
-                        + "LeituraDisco,"
-                        + "EscritaDisco,"
-                        + "TempoTransferencia,"
-                        + "NomeRede,"
-                        + "Hostname,"
-                        + "NomeDeDominio,"
-                        + "fkTotem,"
-                        + "fkEstabelecimento,"
-                        + "fkConfigPC,"
-                        + "fkMetricaAviso)"
-                        + " values ("
-                        + "%s,"
-                        + "%s,"
-                        + "%d,"
-                        + "%d,"
-                        + "%s,"
-                        + "%s,"
-                        + "%s,"
-                        + "%s,"
-                        + "%s,"
-                        + "%s,"
-                        + "%s,"
-                        + "'%s',"
-                        + "'%s',"
-                        + "'%s',"
-                        + "%d,"
-                        + "%d,"
-                        + "%d,"
-                        + "%d)",
-                        processadorPorc,
-                        Cpuhz,
-                        TotalProcessos,
-                        ThreadsCpu,
-                        MemoriaTotal,
-                        MemoriaDisponivel,
-                        MemoriaEmUso,
-                        TamanhoDisco,
-                        LeituraDisco,
-                        EscritaDisco,
-                        TempoTransferencia,
-                        NomeRede,
-                        Hostname,
-                        NomeDeDominio,
-                        idTotem,
-                        fkEstabelecimento,
-                        fkConfigPc,
-                        fkMetricaAviso
-                        );
+                            + "processadorPorc,"
+                            + "cpuhz,"
+                            + "totalProcessos,"
+                            + "threadsCpu,"
+                            + "memoriaTotal,"
+                            + "memoriaDisponivel,"
+                            + "memoriaEmUso,"
+                            + "TamanhoDisco,"
+                            + "LeituraDisco,"
+                            + "EscritaDisco,"
+                            + "TempoTransferencia,"
+                            + "NomeRede,"
+                            + "Hostname,"
+                            + "NomeDeDominio,"
+                            + "fkTotem,"
+                            + "fkEstabelecimento,"
+                            + "fkConfigPC,"
+                            + "fkMetricaAviso)"
+                            + " values ("
+                            + "%s,"
+                            + "%s,"
+                            + "%d,"
+                            + "%d,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "'%s',"
+                            + "'%s',"
+                            + "'%s',"
+                            + "%d,"
+                            + "%d,"
+                            + "%d,"
+                            + "%d)",
+                            processadorPorc,
+                            Cpuhz,
+                            TotalProcessos,
+                            ThreadsCpu,
+                            MemoriaTotal,
+                            MemoriaDisponivel,
+                            MemoriaEmUso,
+                            TamanhoDisco,
+                            LeituraDisco,
+                            EscritaDisco,
+                            TempoTransferencia,
+                            NomeRede,
+                            Hostname,
+                            NomeDeDominio,
+                            idTotem,
+                            fkEstabelecimento,
+                            fkConfigPc,
+                            fkMetricaAviso
+                    );
                     conAzure.update(dataAzure);
-                    
+
 //                    CREATE TABLE Dados( 
 //                        id int primary key auto_increment,
 //                        processadorPorc Varchar(45),
@@ -229,53 +239,52 @@ public class DadosInterface extends javax.swing.JFrame {
 //                        Hostname Varchar(45),
 //                        NomeDeDominio Varchar(45)
 //                    );        
-                
-                String dataSql = String.format("Insert into Dados("
-                        + "processadorPorc,"
-                        + "cpuhz,"
-                        + "totalProcessos,"
-                        + "threadsCpu,"
-                        + "memoriaTotal,"
-                        + "memoriaDisponivel,"
-                        + "memoriaEmUso,"
-                        + "TamanhoDisco,"
-                        + "LeituraDisco,"
-                        + "EscritaDisco,"
-                        + "TempoTransferencia,"
-                        + "NomeRede,"
-                        + "Hostname,"
-                        + "NomeDeDominio)"
-                        + " values ("
-                        + "%s,"
-                        + "%s,"
-                        + "%d,"
-                        + "%d,"
-                        + "%s,"
-                        + "%s,"
-                        + "%s,"
-                        + "%s,"
-                        + "%s,"
-                        + "%s,"
-                        + "%s,"
-                        + "'%s',"
-                        + "'%s',"
-                        + "'%s')",
-                        processadorPorc,
-                        Cpuhz,
-                        TotalProcessos,
-                        ThreadsCpu,
-                        MemoriaTotal,
-                        MemoriaDisponivel,
-                        MemoriaEmUso,
-                        TamanhoDisco,
-                        LeituraDisco,
-                        EscritaDisco,
-                        TempoTransferencia,
-                        NomeRede,
-                        Hostname,
-                        NomeDeDominio
-                        );
-                conMysql.update(dataSql);
+                    String dataSql = String.format("Insert into Dados("
+                            + "processadorPorc,"
+                            + "cpuhz,"
+                            + "totalProcessos,"
+                            + "threadsCpu,"
+                            + "memoriaTotal,"
+                            + "memoriaDisponivel,"
+                            + "memoriaEmUso,"
+                            + "TamanhoDisco,"
+                            + "LeituraDisco,"
+                            + "EscritaDisco,"
+                            + "TempoTransferencia,"
+                            + "NomeRede,"
+                            + "Hostname,"
+                            + "NomeDeDominio)"
+                            + " values ("
+                            + "%s,"
+                            + "%s,"
+                            + "%d,"
+                            + "%d,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "'%s',"
+                            + "'%s',"
+                            + "'%s')",
+                            processadorPorc,
+                            Cpuhz,
+                            TotalProcessos,
+                            ThreadsCpu,
+                            MemoriaTotal,
+                            MemoriaDisponivel,
+                            MemoriaEmUso,
+                            TamanhoDisco,
+                            LeituraDisco,
+                            EscritaDisco,
+                            TempoTransferencia,
+                            NomeRede,
+                            Hostname,
+                            NomeDeDominio
+                    );
+                    conMysql.update(dataSql);
                 }
             }, 0, 10000);
         }

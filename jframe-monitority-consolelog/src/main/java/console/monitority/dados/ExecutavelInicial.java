@@ -77,45 +77,47 @@ public class ExecutavelInicial {
         Boolean acessoPermitido = false;
 
         // Ve se existe o código do totem
-        System.out.println(SerialNumber);
-            String forSelectTotem = String.format("select * from [dbo].[totem] where serialtotem ='%s'", TotemSerial);
+        String forSelectTotem = String.format("select * from [dbo].[totem] where serialtotem ='%s'", TotemSerial);
 
-            List<Totem> totens = conAzure.query(forSelectTotem,
-                    new BeanPropertyRowMapper<>(Totem.class));
+        List<Totem> totens = conAzure.query(forSelectTotem,
+                new BeanPropertyRowMapper<>(Totem.class));
 
-            if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
-                SerialNumber = true;
-            }
-            String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
-                    + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
-            List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
-                    new BeanPropertyRowMapper<>(Estabelecimento.class));
-
+        if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
+            SerialNumber = true;
+        }
+        String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
+                + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
+        List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
+                new BeanPropertyRowMapper<>(Estabelecimento.class));
+        
         // Parte do Login
+        do {
         System.out.println("Digite o seu email:");
         String email = leitor.next();
         System.out.println("Digite a sua senha:");
         String senha = leitor.next();
 
-        try {
-            String forSelectLogin = String.format("select * from [dbo].[Empresa] where email ='%s' and senha ='%s'", email, senha);
-            List<Empresa> empresas = conAzure.query(forSelectLogin,
-                    new BeanPropertyRowMapper<>(Empresa.class));
-            for (Empresa empresa : empresas) {
-                if (empresa.getEmail().equals(email) && empresa.getSenha().equals(senha)) {
-                    acessoPermitido = true;
+        
+            try {
+                String forSelectLogin = String.format("select * from [dbo].[Empresa] where email ='%s' and senha ='%s'", email, senha);
+                List<Empresa> empresas = conAzure.query(forSelectLogin,
+                        new BeanPropertyRowMapper<>(Empresa.class));
+                for (Empresa empresa : empresas) {
+                    if (empresa.getEmail().equals(email) && empresa.getSenha().equals(senha)) {
+                        acessoPermitido = true;
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                String forSelectUsuario = String.format("select * from [dbo].[Usuario] where email ='%s' and senha ='%s'", email, senha);
+                List<Usuario> usuarios = conAzure.query(forSelectUsuario,
+                        new BeanPropertyRowMapper<>(Usuario.class));
+                for (Usuario usuario : usuarios) {
+                    if (usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
+                        acessoPermitido = true;
+                    }
                 }
             }
-        } catch (IndexOutOfBoundsException e) {
-            String forSelectUsuario = String.format("select * from [dbo].[Usuario] where email ='%s' and senha ='%s'", email, senha);
-            List<Usuario> usuarios = conAzure.query(forSelectUsuario,
-                    new BeanPropertyRowMapper<>(Usuario.class));
-            for (Usuario usuario : usuarios) {
-                if (usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
-                    acessoPermitido = true;
-                }
-            }
-        }
+        } while (acessoPermitido != true);
 
         if (acessoPermitido == true) {
         }

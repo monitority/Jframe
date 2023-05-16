@@ -1,8 +1,0 @@
-classes\tabelas\Dados.class
-classes\tabelas\Empresa.class
-classes\tabelas\Totem.class
-classes\tabelas\Usuario.class
-classes\tabelas\Estabelecimento.class
-console\monitority\dados\ExecutavelInicial.class
-bd\java\ConexaoBDAzure.class
-bd\java\ConexaoBDMysql.class
