@@ -36,6 +36,13 @@ import java.util.TimerTask;
  */
 public class ExecutavelInicial {
 
+    private static Boolean SerialNumber = false;
+    private static Boolean acessoTotem = false;
+    private static Integer fkEstabelecimento;
+    private static Integer fkMetricaAviso;
+    private static Integer fkConfigPC;
+    private static Integer idTotem;
+
     public static void main(String[] args) {
         Looca looca = new Looca();;
 
@@ -63,7 +70,7 @@ public class ExecutavelInicial {
         String NomeDeDominio = rede.getParametros().getNomeDeDominio();
         List<String> ServidorDns = rede.getParametros().getServidoresDns();
 
-        Boolean SerialNumber = false;
+        // Boolean SerialNumber = false;
         String TotemSerial = processadorCpu.getId();
 
         // Variáveis das conexões do Banco
@@ -77,27 +84,65 @@ public class ExecutavelInicial {
         Boolean acessoPermitido = false;
 
         // Ve se existe o código do totem
-        String forSelectTotem = String.format("select * from [dbo].[totem] where serialtotem ='%s'", TotemSerial);
+        do {
+            String forSelectTotem = String.format("select * from [dbo].[totem] where serialtotem ='%s'", TotemSerial);
 
-        List<Totem> totens = conAzure.query(forSelectTotem,
-                new BeanPropertyRowMapper<>(Totem.class));
+            List<Totem> totens = conAzure.query(forSelectTotem,
+                    new BeanPropertyRowMapper<>(Totem.class));
 
-        if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
-            SerialNumber = true;
-        }
-        String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
-                + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
-        List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
-                new BeanPropertyRowMapper<>(Estabelecimento.class));
-        
+            try {
+                if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
+                    SerialNumber = true;
+                }
+
+                String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
+                        + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
+                List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
+                        new BeanPropertyRowMapper<>(Estabelecimento.class));
+
+            } catch (IndexOutOfBoundsException e) {
+                if (acessoTotem == false) {
+                    System.out.println("Totem não registrado! Logue para acessar o serial do totem.");
+                    System.out.println("Digite o seu email:");
+                    String email = leitor.next();
+                    System.out.println("Digite a sua senha:");
+                    String senha = leitor.next();
+
+                    try {
+                        String forSelectLogin = String.format("select * from [dbo].[Empresa] where email ='%s' and senha ='%s'", email, senha);
+                        List<Empresa> empresas = conAzure.query(forSelectLogin,
+                                new BeanPropertyRowMapper<>(Empresa.class));
+                        for (Empresa empresa : empresas) {
+                            if (empresa.getEmail().equals(email) && empresa.getSenha().equals(senha)) {
+                                System.out.println(processadorCpu.getId());
+                                acessoTotem = true;
+                            }
+                        }
+                    } catch (IndexOutOfBoundsException er) {
+                        String forSelectUsuario = String.format("select * from [dbo].[Usuario] where email ='%s' and senha ='%s'", email, senha);
+                        List<Usuario> usuarios = conAzure.query(forSelectUsuario,
+                                new BeanPropertyRowMapper<>(Usuario.class));
+                        for (Usuario usuario : usuarios) {
+                            if (usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
+                                System.out.println(processadorCpu.getId());
+                                acessoTotem = true;
+                            }
+                           
+                        }
+                    }
+                    return;
+                }
+                return;
+            }
+        } while (SerialNumber == false);
+
         // Parte do Login
         do {
-        System.out.println("Digite o seu email:");
-        String email = leitor.next();
-        System.out.println("Digite a sua senha:");
-        String senha = leitor.next();
+            System.out.println("Digite o seu email:");
+            String email = leitor.next();
+            System.out.println("Digite a sua senha:");
+            String senha = leitor.next();
 
-        
             try {
                 String forSelectLogin = String.format("select * from [dbo].[Empresa] where email ='%s' and senha ='%s'", email, senha);
                 List<Empresa> empresas = conAzure.query(forSelectLogin,
@@ -176,10 +221,10 @@ public class ExecutavelInicial {
                         NomeRede,
                         Hostname,
                         NomeDeDominio,
-                        totens.get(0).getIdTotem(),
-                        totens.get(0).getFkEstabelecimento(),
-                        totens.get(0).getFkConfigPc(),
-                        estabelecimentos.get(0).getFkMetricaAviso()
+                        idTotem,
+                        fkEstabelecimento,
+                        fkConfigPC,
+                        fkMetricaAviso
                 );
 
                 conAzure.update(dataAzure);

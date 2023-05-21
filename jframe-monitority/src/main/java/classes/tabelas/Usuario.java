@@ -18,17 +18,6 @@ public class Usuario {
     private String permissao;
     private Integer fkEmpresa;
 
-    public Usuario(Integer idUsuario, String nome, String senha, String email, String telefone, String cargo, String permissao, Integer fkEmpresa) {
-        this.idUsuario = idUsuario;
-        this.nome = nome;
-        this.senha = senha;
-        this.email = email;
-        this.telefone = telefone;
-        this.cargo = cargo;
-        this.permissao = permissao;
-        this.fkEmpresa = fkEmpresa;
-    }
-
     public Integer getIdUsuario() {
         return idUsuario;
     }

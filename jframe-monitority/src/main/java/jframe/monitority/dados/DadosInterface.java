@@ -20,6 +20,7 @@ import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
 import com.github.britooo.looca.api.group.janelas.JanelaGrupo;
 import com.github.britooo.looca.api.group.dispositivos.DispositivosUsbGrupo;
 import java.util.List;
+import java.text.DecimalFormat;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,8 +34,8 @@ public class DadosInterface extends javax.swing.JFrame {
     private ConexaoBDAzure conexaoBDAzure = new ConexaoBDAzure();
     private JdbcTemplate conAzure = conexaoBDAzure.getConexaoDoBancoAzure();
 
-    private ConexaoBDMysql conexaoBDMysql = new ConexaoBDMysql();
-    private JdbcTemplate conMysql = conexaoBDMysql.getConexaoDoBancoMysql();
+    /*private ConexaoBDMysql conexaoBDMysql = new ConexaoBDMysql();
+    private JdbcTemplate conMysql = conexaoBDMysql.getConexaoDoBancoMysql();*/
 
     public Integer idTotem = 0;
     public Integer fkEstabelecimento = 0;
@@ -53,7 +54,6 @@ public class DadosInterface extends javax.swing.JFrame {
 
         Processador processadorCpu = looca.getProcessador();
         String TotemSerial = processadorCpu.getId();
-        System.out.println(TotemSerial);
 
         String forSelectTotem = String.format("select * from [dbo].[totem] where "
                 + "serialtotem ='%s'", TotemSerial);
@@ -61,42 +61,35 @@ public class DadosInterface extends javax.swing.JFrame {
                 new BeanPropertyRowMapper<>(Totem.class));
 
         if (SerialNumber != true) {
-            new Timer().scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    try {
-                        if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
-                            idTotem = totens.get(0).getIdTotem();
-                            fkEstabelecimento = totens.get(0).getFkEstabelecimento();
-                            fkConfigPc = totens.get(0).getFkConfigPc();
-                            SerialNumber = true;
-                            String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
-                                    + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
-                            List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
-                                    new BeanPropertyRowMapper<>(Estabelecimento.class));
-                            fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
-                        }
-                    } catch (IndexOutOfBoundsException e) {
-                        System.out.println("Totem não listado");
-                    }
+
+            try {
+                if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
+                    idTotem = totens.get(0).getIdTotem();
+                    fkEstabelecimento = totens.get(0).getFkEstabelecimento();
+                    fkConfigPc = totens.get(0).getFkConfigPc();
+                    SerialNumber = true;
+                    System.out.println(SerialNumber);
+                    String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
+                            + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
+
+                    List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
+                            new BeanPropertyRowMapper<>(Estabelecimento.class));
+
+                    fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
                 }
-            }, 0, 10000);
-        }
-
-        List<Estabelecimento> estabelecimentos = conAzure.query("select * from [dbo].[estabelecimento]",
-                new BeanPropertyRowMapper<>(Estabelecimento.class));
-
-        for (Estabelecimento estabelecimento : estabelecimentos) {
-            if (estabelecimento.getIdEstabelecimento().equals(fkEstabelecimento)) {
-                fkMetricaAviso = estabelecimento.getFkMetricaAviso();
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Totem não listado");
             }
+
         }
 
         if (SerialNumber == true) {
+            System.out.println("teste");
             new Timer().scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
                     Sistema sistema = looca.getSistema();
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
                     // Dados que vamos receber dos seguintes Objetos:
                     Memoria memoriaRam = looca.getMemoria();
@@ -110,29 +103,37 @@ public class DadosInterface extends javax.swing.JFrame {
                     //discoGrupo.getTamanhoTotal() / 1073741824 ));
                     //memoria.getTotal() / 1000000000));
                     Double processadorPorc = processadorCpu.getUso();
+                    String processadorPorcString = decimalFormat.format(processadorPorc);
                     Long Cpuhz = processadorCpu.getFrequencia();
                     Integer TotalProcessos = processosCpu.getTotalProcessos();
                     Integer ThreadsCpu = processosCpu.getTotalThreads();
                     // Cpu
                     lblPorcCpuValue.setText(String.format("▶ %.2f%%",
                             processadorPorc));
-                    lblHzCpuValue.setText(String.format("▶ %s hz",
+                    lblHzCpuValue.setText(String.format("▶ %d hz",
                             Cpuhz));
                     lblProcessosCpuValue.setText(String.format("▶ %s",
                             TotalProcessos));
                     lblThreadsCpuValue.setText(String.format("▶ %s",
                             ThreadsCpu));
-
+                    
+                    
                     Long MemoriaTotal = memoriaRam.getTotal() / 1000000000;
+                    Double MemoriaTotalDouble = Double.valueOf(MemoriaTotal).doubleValue();
+                    String MemoriaTotalString = decimalFormat.format(MemoriaTotalDouble);
                     Long MemoriaDisponivel = memoriaRam.getDisponivel() / 1000000000;
+                    Double MemoriaDisponivelDouble = Double.valueOf(MemoriaDisponivel).doubleValue();
+                    String MemoriaDisponivelString = decimalFormat.format(MemoriaDisponivelDouble);
                     Long MemoriaEmUso = memoriaRam.getEmUso() / 1000000000;
+                    Double MemoriaEmUsoDouble = Double.valueOf(MemoriaEmUso).doubleValue();
+                    String MemoriaEmUsoString = decimalFormat.format(MemoriaEmUsoDouble);
                     // Memória
-                    lblTotalMemoriaRamValue.setText(String.format("▶ %s GB",
-                            MemoriaTotal));
-                    lblDisponivelMemoriaRamValue.setText(String.format("▶ %s GB",
-                            MemoriaDisponivel));
-                    lblEmUsoMemoriaValueValue.setText(String.format("▶ %s GB",
-                            MemoriaEmUso));
+                    lblTotalMemoriaRamValue.setText(String.format("▶ %.2f GB",
+                            MemoriaTotalDouble));
+                    lblDisponivelMemoriaRamValue.setText(String.format("▶ %.2f GB",
+                            MemoriaDisponivelDouble));
+                    lblEmUsoMemoriaValueValue.setText(String.format("▶ %.2f GB",
+                            MemoriaEmUsoDouble));
 
                     Long TamanhoDisco = discoGrupo.getTamanhoTotal() / 1073741824;
                     Long LeituraDisco = discoGrupo.getDiscos().get(0).getLeituras();
@@ -141,11 +142,11 @@ public class DadosInterface extends javax.swing.JFrame {
                     // Disco
                     lblTamanhoDiscoValue.setText(String.format("▶ %s GB",
                             TamanhoDisco));
-                    lblLeituraDiscoValue.setText(String.format("▶ %s",
+                    lblLeituraDiscoValue.setText(String.format("▶ %d",
                             LeituraDisco));
-                    lblEscritaDiscoValue.setText(String.format("▶ %s",
+                    lblEscritaDiscoValue.setText(String.format("▶ %d",
                             EscritaDisco));
-                    lblTempoTransferenciaDiscoValue.setText(String.format("▶ %s",
+                    lblTempoTransferenciaDiscoValue.setText(String.format("▶ %d",
                             TempoTransferencia));
 
                     String NomeRede = rede.getGrupoDeInterfaces().getInterfaces().get(1).getNome();
@@ -183,17 +184,16 @@ public class DadosInterface extends javax.swing.JFrame {
                             + "fkConfigPC,"
                             + "fkMetricaAviso)"
                             + " values ("
-                            + "%s,"
-                            + "%s,"
+                            + "'%s',"
+                            + "'%s',"
                             + "%d,"
                             + "%d,"
-                            + "%s,"
-                            + "%s,"
-                            + "%s,"
-                            + "%s,"
-                            + "%s,"
-                            + "%s,"
-                            + "%s,"
+                            + "'%s',"
+                            + "'%s',"
+                            + "'%s',"
+                            + "'%s',"
+                            + "'%s',"
+                            + "'%s',"
                             + "'%s',"
                             + "'%s',"
                             + "'%s',"
@@ -201,13 +201,13 @@ public class DadosInterface extends javax.swing.JFrame {
                             + "%d,"
                             + "%d,"
                             + "%d)",
-                            processadorPorc,
+                            processadorPorcString,
                             Cpuhz,
                             TotalProcessos,
                             ThreadsCpu,
-                            MemoriaTotal,
-                            MemoriaDisponivel,
-                            MemoriaEmUso,
+                            MemoriaTotalString,
+                            MemoriaDisponivelString,
+                            MemoriaEmUsoString,
                             TamanhoDisco,
                             LeituraDisco,
                             EscritaDisco,
@@ -222,24 +222,7 @@ public class DadosInterface extends javax.swing.JFrame {
                     );
                     conAzure.update(dataAzure);
 
-//                    CREATE TABLE Dados( 
-//                        id int primary key auto_increment,
-//                        processadorPorc Varchar(45),
-//                        cpuhz Varchar(45),
-//                        totalProcessos int ,
-//                        threadsCpu int,
-//                        memoriaTotal Varchar(45),
-//                        memoriaDisponivel Varchar(45),
-//                        memoriaEmUso Varchar(45),
-//                        TamanhoDisco Varchar(45),
-//                        LeituraDisco Varchar(45),
-//                        EscritaDisco Varchar(45),
-//                        TempoTransferencia Varchar(45),
-//                        NomeRede Varchar(45),
-//                        Hostname Varchar(45),
-//                        NomeDeDominio Varchar(45)
-//                    );        
-                    String dataSql = String.format("Insert into Dados("
+                    /*String dataSql = String.format("Insert into Dados("
                             + "processadorPorc,"
                             + "cpuhz,"
                             + "totalProcessos,"
@@ -265,17 +248,17 @@ public class DadosInterface extends javax.swing.JFrame {
                             + "%s,"
                             + "%s,"
                             + "%s,"
+                            + "%d,"
                             + "%s,"
-                            + "'%s',"
-                            + "'%s',"
-                            + "'%s')",
-                            processadorPorc,
+                            + "%s,"
+                            + "%s)",
+                            processadorPorcString,
                             Cpuhz,
                             TotalProcessos,
                             ThreadsCpu,
-                            MemoriaTotal,
-                            MemoriaDisponivel,
-                            MemoriaEmUso,
+                            MemoriaTotalString,
+                            MemoriaDisponivelString,
+                            MemoriaEmUsoString,
                             TamanhoDisco,
                             LeituraDisco,
                             EscritaDisco,
@@ -284,7 +267,7 @@ public class DadosInterface extends javax.swing.JFrame {
                             Hostname,
                             NomeDeDominio
                     );
-                    conMysql.update(dataSql);
+                    conMysql.update(dataSql);*/
                 }
             }, 0, 10000);
         }
