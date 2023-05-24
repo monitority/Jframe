@@ -46,7 +46,7 @@ public class ExecutavelInicial {
     private static Integer idTotem;
 
     public static void main(String[] args) {
-        Looca looca = new Looca();;
+        Looca looca = new Looca();
 
         // Variáveis da API looca
         Memoria memoriaRam = looca.getMemoria();
