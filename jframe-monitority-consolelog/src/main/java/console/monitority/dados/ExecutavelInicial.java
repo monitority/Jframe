@@ -45,8 +45,9 @@ public class ExecutavelInicial {
     private static Integer fkConfigPC;
     private static Integer idTotem;
 
-    public static void main(String[] args) {
-        Looca looca = new Looca();
+     public static void main(String[] args) {
+        
+        Looca looca = new Looca();;
 
         // Variáveis da API looca
         Memoria memoriaRam = looca.getMemoria();
@@ -62,9 +63,24 @@ public class ExecutavelInicial {
         Long Cpuhz = processadorCpu.getFrequencia();
         Integer TotalProcessos = processosCpu.getTotalProcessos();
         Integer ThreadsCpu = processosCpu.getTotalThreads();
-        Long MemoriaTotal = memoriaRam.getTotal() / 1000000000;
-        Long MemoriaDisponivel = memoriaRam.getDisponivel() / 1000000000;
-        Long MemoriaEmUso = memoriaRam.getEmUso() / 1000000000;
+        Long MemoriaTotal = memoriaRam.getTotal();
+        Double MemoriaTotalDouble = MemoriaTotal.doubleValue() / 1073741824.0;
+        String MemoriaTotalFormatado = String.valueOf(MemoriaTotalDouble).replace(",", ".");
+        String formatMemoriaTotal = MemoriaTotalFormatado.substring(0, 5);
+
+        Long MemoriaDisponivel = memoriaRam.getDisponivel();
+        Double MemoriaDisponivelDouble = MemoriaDisponivel.doubleValue() / 1073741824.0;
+        String MemoriaDisponivelFormatado = String.valueOf(MemoriaDisponivelDouble).replace(",", ".");
+        String formatMemoriaDisponivel = MemoriaDisponivelFormatado.substring(0, 5);
+
+        Long MemoriaEmUso = memoriaRam.getEmUso();
+        Double MemoriaEmUsoDouble = MemoriaEmUso.doubleValue() / 1073741824.0;
+        String MemoriaEmUsoFormatado = String.valueOf(MemoriaEmUsoDouble).replace(",", ".");
+        String formatMemoriaEmUso = MemoriaEmUsoFormatado.substring(0, 5);
+
+        Double memorioPorc = MemoriaTotalDouble / (MemoriaEmUso * 100);
+        String memorioPorcFormatado = String.valueOf(memorioPorc).replace(",", ".");
+        String formatMemoriaPorc = memorioPorcFormatado.substring(0, 5);
         Long TamanhoDisco = discoGrupo.getTamanhoTotal() / 1073741824;
         Long LeituraDisco = discoGrupo.getDiscos().get(0).getLeituras();
         Long EscritaDisco = discoGrupo.getDiscos().get(0).getEscritas();
@@ -81,8 +97,8 @@ public class ExecutavelInicial {
         ConexaoBDAzure conexaoBDAzure = new ConexaoBDAzure();
         JdbcTemplate conAzure = conexaoBDAzure.getConexaoDoBancoAzure();
 
-        ConexaoBDMysql conexaoBDMysql = new ConexaoBDMysql();
-        JdbcTemplate conMysql = conexaoBDMysql.getConexaoDoBancoMysql();
+        /*ConexaoBDMysql conexaoBDMysql = new ConexaoBDMysql();
+        JdbcTemplate conMysql = conexaoBDMysql.getConexaoDoBancoMysql();*/
 
         Scanner leitor = new Scanner(System.in);
         Console console = System.console();
@@ -98,12 +114,18 @@ public class ExecutavelInicial {
             try {
                 if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
                     SerialNumber = true;
+                    idTotem = totens.get(0).getIdTotem();
+                    fkEstabelecimento = totens.get(0).getFkEstabelecimento();
+                    fkConfigPC = totens.get(0).getFkConfigPc();
+                    
                 }
 
                 String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
                         + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
                 List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
                         new BeanPropertyRowMapper<>(Estabelecimento.class));
+                fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
+                
 
             } catch (IndexOutOfBoundsException e) {
                 if (acessoTotem == false) {
@@ -146,7 +168,7 @@ public class ExecutavelInicial {
             System.out.println("Digite o seu email:");
             String email = leitor.next();
             System.out.println("Digite a sua senha:");
-            char[] senha = console.readPassword("Senha: ");
+            String senha = leitor.next();
 
             try {
                 String forSelectLogin = String.format("select * from [dbo].[Empresa] where email ='%s' and senha ='%s'", email, senha);
@@ -175,27 +197,26 @@ public class ExecutavelInicial {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                
-                Dados dado = new Dados();
+                System.out.println("ta aparecendo aqui");
                 String dataAzure = String.format("Insert into Dados"
                         + "(processadorPorc,cpuhz,totalProcessos,threadsCpu,"
                         + "memoriaTotal,memoriaDisponivel,memoriaEmUso,TamanhoDisco,"
                         + "LeituraDisco,EscritaDisco,TempoTransferencia,NomeRede,Hostname,"
-                        + "NomeDeDominio,fkTotem,fkEstabelecimento,fkConfigPC,fkMetricaAviso) "
+                        + "NomeDeDominio,fkTotem,fkEstabelecimento,fkConfigPC,fkMetricaAviso, memoriaPorc) "
                         + "values"
                         + "(%s,%d, %d, %d,"
-                        + "%d,%d,%d,%s,"
+                        + "%s,%s,%s,%s,"
                         + "%s,%s,%s,'%s','%s',"
-                        + "'%s',%d,%d,%d,%d)",
+                        + "'%s',%d,%d,%d,%d,%s)",
                         formatPorc, Cpuhz, TotalProcessos, ThreadsCpu,
-                        MemoriaTotal, MemoriaDisponivel, MemoriaEmUso, TamanhoDisco,
+                        formatMemoriaTotal, formatMemoriaDisponivel, formatMemoriaEmUso, TamanhoDisco,
                         LeituraDisco, EscritaDisco, TempoTransferencia, NomeRede, Hostname,
-                        NomeDeDominio, idTotem, fkEstabelecimento, fkConfigPC, fkMetricaAviso
+                        NomeDeDominio, idTotem, fkEstabelecimento, fkConfigPC, fkMetricaAviso,formatMemoriaPorc
                 );
 
                 conAzure.update(dataAzure);
 
-                String dataSql = String.format("Insert into Dados("
+                /*String dataSql = String.format("Insert into Dados("
                         + "processadorPorc,"
                         + "cpuhz,"
                         + "totalProcessos,"
@@ -244,7 +265,7 @@ public class ExecutavelInicial {
                 List<Dados> totens = conMysql.query("select * from Dados",
                         new BeanPropertyRowMapper<>(Dados.class));
 
-                System.out.println(totens.get(totens.size() - 1).toString());
+                System.out.println(totens.get(totens.size() - 1).toString());*/
 
             }
         }, 0, 10000);
