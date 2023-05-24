@@ -13,6 +13,9 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import classes.tabelas.Empresa;
+import classes.tabelas.Usuario;
+import com.github.britooo.looca.api.core.Looca;
+import com.github.britooo.looca.api.group.processador.Processador;
 import jframe.monitority.dados.DadosInterface;
 
 /**
@@ -20,13 +23,11 @@ import jframe.monitority.dados.DadosInterface;
  * @author Gabriel Kohatu
  */
 public class TelaLogin extends javax.swing.JFrame {
-    
-    private final DadosInterface dadosInterface;
 
+    private final DadosInterface dadosInterface;
+    private Looca looca = new Looca();
     private ConexaoBDAzure conexaoBDAzure = new ConexaoBDAzure();
     private JdbcTemplate conAzure = conexaoBDAzure.getConexaoDoBancoAzure();
-   
-
 
     public TelaLogin() {
         initComponents();
@@ -271,27 +272,42 @@ public class TelaLogin extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         TelaLogin login = new TelaLogin();
-
+        Processador processadorCpu = looca.getProcessador();
+        
         String email = txtEmailValue.getText();
         String senha = txtSenhaValue.getText();
-
-        if (email.length() == 0 && senha.length() == 0) {
-            System.out.println("Senha ou E-mail inválidos");
-        } else {
-            List<Empresa> empresas = conAzure.query("select * from [dbo].[empresa]",
-                new BeanPropertyRowMapper<>(Empresa.class));
-
+        try {
+            String forSelectLogin = String.format("select * from [dbo].[Empresa] where email ='%s' and senha ='%s'", email, senha);
+            List<Empresa> empresas = conAzure.query(forSelectLogin,
+                    new BeanPropertyRowMapper<>(Empresa.class));
             for (Empresa empresa : empresas) {
                 if (empresa.getEmail().equals(email) && empresa.getSenha().equals(senha)) {
-                    System.out.println("Esta logado");
-
+                    System.out.println("Esta logado");      
+                    System.out.println(processadorCpu.getId());
                     dadosInterface.setVisible(true);
                     this.dispose();
                     return;
                 }
             }
-            System.out.println("Login não encontrado");
+            
+            String forSelectUsuario = String.format("select * from [dbo].[usuario] where email='%s' and senha='%s'", email, senha);
+            List<Usuario> usuarios = conAzure.query(forSelectUsuario,
+                    new BeanPropertyRowMapper<>(Usuario.class));
+            for (Usuario usuario : usuarios) {
+                if (usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
+                    System.out.println("Esta logado");
+                    dadosInterface.setVisible(true);
+                    System.out.println(processadorCpu.getId());
+                    this.dispose();
+                    return;
+                }
+            }
+        } catch (IndexOutOfBoundsException er) {
+            System.out.println(er);
         }
+        
+        System.out.println("Não encontrado");
+
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void txtEmailValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailValueActionPerformed
@@ -302,12 +318,12 @@ public class TelaLogin extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                     
-                    new TelaLogin().setVisible(true);
-                    new DadosInterface().setVisible(false);
+
+                new TelaLogin().setVisible(true);
+                new DadosInterface().setVisible(false);
 
             }
         });
