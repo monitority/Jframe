@@ -175,6 +175,8 @@ public class ExecutavelInicial {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                
+                Dados dado = new Dados();
                 String dataAzure = String.format("Insert into Dados"
                         + "(processadorPorc,cpuhz,totalProcessos,threadsCpu,"
                         + "memoriaTotal,memoriaDisponivel,memoriaEmUso,TamanhoDisco,"
