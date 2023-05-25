@@ -97,8 +97,8 @@ public class ExecutavelInicial {
         ConexaoBDAzure conexaoBDAzure = new ConexaoBDAzure();
         JdbcTemplate conAzure = conexaoBDAzure.getConexaoDoBancoAzure();
 
-        /*ConexaoBDMysql conexaoBDMysql = new ConexaoBDMysql();
-        JdbcTemplate conMysql = conexaoBDMysql.getConexaoDoBancoMysql();*/
+        ConexaoBDMysql conexaoBDMysql = new ConexaoBDMysql();
+        JdbcTemplate conMysql = conexaoBDMysql.getConexaoDoBancoMysql();
 
         Scanner leitor = new Scanner(System.in);
         Console console = System.console();
@@ -216,7 +216,7 @@ public class ExecutavelInicial {
 
                 conAzure.update(dataAzure);
 
-                /*String dataSql = String.format("Insert into Dados("
+                String dataSql = String.format("Insert into Dados("
                         + "processadorPorc,"
                         + "cpuhz,"
                         + "totalProcessos,"
@@ -265,7 +265,7 @@ public class ExecutavelInicial {
                 List<Dados> totens = conMysql.query("select * from Dados",
                         new BeanPropertyRowMapper<>(Dados.class));
 
-                System.out.println(totens.get(totens.size() - 1).toString());*/
+                System.out.println(totens.get(totens.size() - 1).toString());
 
             }
         }, 0, 10000);
