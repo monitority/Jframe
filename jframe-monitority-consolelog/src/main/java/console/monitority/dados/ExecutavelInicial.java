@@ -9,7 +9,6 @@ import classes.tabelas.Totem;
 import classes.tabelas.Usuario;
 import java.util.List;
 import java.util.Scanner;
-import java.io.Console;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -23,7 +22,6 @@ import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
 import com.github.britooo.looca.api.group.janelas.JanelaGrupo;
 import com.github.britooo.looca.api.group.dispositivos.DispositivosUsbGrupo;
-import static java.lang.System.console;
 
 import java.util.Timer;
 import java.util.TimerTask;
