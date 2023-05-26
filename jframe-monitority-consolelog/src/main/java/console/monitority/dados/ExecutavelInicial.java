@@ -264,10 +264,8 @@ public class ExecutavelInicial {
                         new BeanPropertyRowMapper<>(Dados.class));
 
                 if (!totens.isEmpty()) {
-    System.out.println(totens.get(totens.size() - 1).toString());
-} else {
-    System.out.println("A lista totens está vazia.");
-}
+                    System.out.println(totens.get(totens.size() - 1).toString());
+                } 
 
             }
         }, 0, 10000);
