@@ -58,7 +58,7 @@ public class ExecutavelInicial {
         Double processadorPorc = processadorCpu.getUso();
         String processadorPorcFormatado = String.valueOf(processadorPorc).replace(",", ".");
         String formatPorc = processadorPorcFormatado.substring(0, 5);
-        Long Cpuhz = processadorCpu.getFrequencia();
+        Integer Cpuhz = processadorCpu.getFrequencia();
         Integer TotalProcessos = processosCpu.getTotalProcessos();
         Integer ThreadsCpu = processosCpu.getTotalThreads();
         Long MemoriaTotal = memoriaRam.getTotal();
