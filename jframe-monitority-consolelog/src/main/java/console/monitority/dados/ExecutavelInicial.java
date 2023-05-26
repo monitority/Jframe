@@ -119,19 +119,23 @@ public class ExecutavelInicial {
                     new BeanPropertyRowMapper<>(Totem.class));
 
             try {
-                if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
+                if (!totens.isEmpty() && totens.get(0).getSerialTotem().equals(TotemSerial)) {
                     SerialNumber = true;
                     idTotem = totens.get(0).getIdTotem();
                     fkEstabelecimento = totens.get(0).getFkEstabelecimento();
                     fkConfigPC = totens.get(0).getFkConfigPc();
                     
                 }
-
+                
+                if (SerialNumber) {
                 String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
                         + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
                 List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
                         new BeanPropertyRowMapper<>(Estabelecimento.class));
-                fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
+                if (!estabelecimentos.isEmpty()) {
+                    fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
+                    }
+                }
                 
 
             } catch (IndexOutOfBoundsException e) {
