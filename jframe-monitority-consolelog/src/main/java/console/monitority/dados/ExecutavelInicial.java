@@ -58,7 +58,7 @@ public class ExecutavelInicial {
         Double processadorPorc = processadorCpu.getUso();
         String processadorPorcFormatado = String.valueOf(processadorPorc).replace(",", ".");
         String formatPorc = processadorPorcFormatado.substring(0, 5);
-        // Integer Cpuhz = processadorCpu.getFrequencia();
+        Long Cpuhz = processadorCpu.getFrequencia();
         Integer TotalProcessos = processosCpu.getTotalProcessos();
         Integer ThreadsCpu = processosCpu.getTotalThreads();
         Long MemoriaTotal = memoriaRam.getTotal();
@@ -88,7 +88,6 @@ public class ExecutavelInicial {
         String NomeDeDominio = rede.getParametros().getNomeDeDominio();
         List<String> ServidorDns = rede.getParametros().getServidoresDns();
 
-        // Boolean SerialNumber = false;
         String TotemSerial = processadorCpu.getId();
 
         // Variáveis das conexões do Banco
@@ -99,33 +98,33 @@ public class ExecutavelInicial {
         JdbcTemplate conMysql = conexaoBDMysql.getConexaoDoBancoMysql();
 
         Scanner leitor = new Scanner(System.in);
-        Console console = System.console();
         Boolean acessoPermitido = false;
 
         // Ve se existe o código do totem
         do {
-            String forSelectTotem = String.format("select * from [dbo].[totem] where serialtotem ='%s'", TotemSerial);
+            String forSelectTotem = String.format("select * from [dbo].[totem]", TotemSerial);
 
             List<Totem> totens = conAzure.query(forSelectTotem,
                     new BeanPropertyRowMapper<>(Totem.class));
-
-            try {
-                if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
+            for (Totem toten : totens) {
+                if (toten.getSerialTotem().equals(TotemSerial)) {
                     SerialNumber = true;
-                    idTotem = totens.get(0).getIdTotem();
-                    fkEstabelecimento = totens.get(0).getFkEstabelecimento();
-                    fkConfigPC = totens.get(0).getFkConfigPc();
-                    
+                    acessoTotem = true;
+                    idTotem = toten.getIdTotem();
+                    fkEstabelecimento = toten.getFkEstabelecimento();
+                    fkConfigPC = toten.getFkConfigPc();
                 }
+            }
 
-                String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
-                        + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
-                List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
-                        new BeanPropertyRowMapper<>(Estabelecimento.class));
-                fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
-                
-
-            } catch (IndexOutOfBoundsException e) {
+            String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] ");
+            List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
+                    new BeanPropertyRowMapper<>(Estabelecimento.class));
+            for (Estabelecimento estabelecimento : estabelecimentos) {
+                if (estabelecimento.getIdEstabelecimento() == fkEstabelecimento) {
+                    fkMetricaAviso = estabelecimento.getFkMetricaAviso();
+                }
+            }
+      
                 if (acessoTotem == false) {
                     System.out.println("Totem não registrado! Logue para acessar o serial do totem.");
                     System.out.println("Digite o seu email:");
@@ -133,8 +132,8 @@ public class ExecutavelInicial {
                     System.out.println("Digite a sua senha:");
                     String senha = leitor.next();
 
-                    try {
-                        String forSelectLogin = String.format("select * from [dbo].[Empresa] where email ='%s' and senha ='%s'", email, senha);
+                    
+                        String forSelectLogin = String.format("select * from [dbo].[Empresa]");
                         List<Empresa> empresas = conAzure.query(forSelectLogin,
                                 new BeanPropertyRowMapper<>(Empresa.class));
                         for (Empresa empresa : empresas) {
@@ -143,8 +142,8 @@ public class ExecutavelInicial {
                                 acessoTotem = true;
                             }
                         }
-                    } catch (IndexOutOfBoundsException er) {
-                        String forSelectUsuario = String.format("select * from [dbo].[Usuario] where email ='%s' and senha ='%s'", email, senha);
+                   
+                        String forSelectUsuario = String.format("select * from [dbo].[Usuario]");
                         List<Usuario> usuarios = conAzure.query(forSelectUsuario,
                                 new BeanPropertyRowMapper<>(Usuario.class));
                         for (Usuario usuario : usuarios) {
@@ -152,13 +151,10 @@ public class ExecutavelInicial {
                                 System.out.println(processadorCpu.getId());
                                 acessoTotem = true;
                             }
-
-                        }
                     }
-                    return;
                 }
-                return;
-            }
+                
+            
         } while (SerialNumber == false);
 
         // Parte do Login
@@ -168,8 +164,8 @@ public class ExecutavelInicial {
             System.out.println("Digite a sua senha:");
             String senha = leitor.next();
 
-            try {
-                String forSelectLogin = String.format("select * from [dbo].[Empresa] where email ='%s' and senha ='%s'", email, senha);
+           
+                String forSelectLogin = String.format("select * from [dbo].[Empresa]");
                 List<Empresa> empresas = conAzure.query(forSelectLogin,
                         new BeanPropertyRowMapper<>(Empresa.class));
                 for (Empresa empresa : empresas) {
@@ -177,7 +173,7 @@ public class ExecutavelInicial {
                         acessoPermitido = true;
                     }
                 }
-                String forSelectUsuario = String.format("select * from [dbo].[Usuario] where email ='%s' and senha ='%s'", email, senha);
+                String forSelectUsuario = String.format("select * from [dbo].[Usuario]");
                 List<Usuario> usuarios = conAzure.query(forSelectUsuario,
                         new BeanPropertyRowMapper<>(Usuario.class));
                 for (Usuario usuario : usuarios) {
@@ -185,9 +181,10 @@ public class ExecutavelInicial {
                         acessoPermitido = true;
                     }
                 }
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Login não encontrado.");
-            }
+                if( acessoPermitido == false) {
+                    System.out.println("Login não encontrado.");
+                }
+                
         } while (acessoPermitido != true);
 
         if (acessoPermitido == true) {
