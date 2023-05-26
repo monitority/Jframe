@@ -80,10 +80,19 @@ public class ExecutavelInicial {
         String memorioPorcFormatado = String.valueOf(memorioPorc).replace(",", ".");
         String formatMemoriaPorc = memorioPorcFormatado.substring(0, 5);
         Long TamanhoDisco = discoGrupo.getTamanhoTotal() / 1073741824;
+         
+        List<Disco> discos = discoGrupo.getDiscos();
+        if (!discos.isEmpty()) {
         Long LeituraDisco = discoGrupo.getDiscos().get(0).getLeituras();
         Long EscritaDisco = discoGrupo.getDiscos().get(0).getEscritas();
         Long TempoTransferencia = discoGrupo.getDiscos().get(0).getTempoDeTransferencia();
-        String NomeRede = rede.getGrupoDeInterfaces().getInterfaces().get(0).getNome();
+        }
+         
+        List<InterfaceDeRede> interfacesDeRede = rede.getGrupoDeInterfaces().getInterfaces();
+        if (!interfacesDeRede.isEmpty() && interfacesDeRede.size() >= 2) {
+        String NomeRede = rede.getGrupoDeInterfaces().getInterfaces().get(1).getNome();
+        }
+         
         String Hostname = rede.getParametros().getHostName();
         String NomeDeDominio = rede.getParametros().getNomeDeDominio();
         List<String> ServidorDns = rede.getParametros().getServidoresDns();
