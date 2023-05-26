@@ -263,7 +263,11 @@ public class ExecutavelInicial {
                 List<Dados> totens = conMysql.query("select * from Dados",
                         new BeanPropertyRowMapper<>(Dados.class));
 
-                System.out.println(totens.get(totens.size() - 1).toString());
+                if (!totens.isEmpty()) {
+    System.out.println(totens.get(totens.size() - 1).toString());
+} else {
+    System.out.println("A lista totens está vazia.");
+}
 
             }
         }, 0, 10000);
