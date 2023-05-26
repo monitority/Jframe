@@ -58,7 +58,7 @@ public class ExecutavelInicial {
         Double processadorPorc = processadorCpu.getUso();
         String processadorPorcFormatado = String.valueOf(processadorPorc).replace(",", ".");
         String formatPorc = processadorPorcFormatado.substring(0, 5);
-        // Integer Cpuhz = processadorCpu.getFrequencia();
+        Long Cpuhz = processadorCpu.getFrequencia();
         Integer TotalProcessos = processosCpu.getTotalProcessos();
         Integer ThreadsCpu = processosCpu.getTotalThreads();
         Long MemoriaTotal = memoriaRam.getTotal();
@@ -83,7 +83,7 @@ public class ExecutavelInicial {
         Long LeituraDisco = discoGrupo.getDiscos().get(0).getLeituras();
         Long EscritaDisco = discoGrupo.getDiscos().get(0).getEscritas();
         Long TempoTransferencia = discoGrupo.getDiscos().get(0).getTempoDeTransferencia();
-        String NomeRede = rede.getGrupoDeInterfaces().getInterfaces().get(1).getNome();
+        String NomeRede = rede.getGrupoDeInterfaces().getInterfaces().get(0).getNome();
         String Hostname = rede.getParametros().getHostName();
         String NomeDeDominio = rede.getParametros().getNomeDeDominio();
         List<String> ServidorDns = rede.getParametros().getServidoresDns();
