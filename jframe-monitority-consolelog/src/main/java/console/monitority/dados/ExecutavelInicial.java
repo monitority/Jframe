@@ -57,28 +57,27 @@ public class ExecutavelInicial {
         // Variáveis dos dados
         Double processadorPorc = processadorCpu.getUso();
         String processadorPorcFormatado = String.valueOf(processadorPorc).replace(",", ".");
-        String formatPorc = processadorPorcFormatado.substring(0, 5);
+        
         Long Cpuhz = processadorCpu.getFrequencia();
         Integer TotalProcessos = processosCpu.getTotalProcessos();
         Integer ThreadsCpu = processosCpu.getTotalThreads();
         Long MemoriaTotal = memoriaRam.getTotal();
         Double MemoriaTotalDouble = MemoriaTotal.doubleValue() / 1073741824.0;
         String MemoriaTotalFormatado = String.valueOf(MemoriaTotalDouble).replace(",", ".");
-        String formatMemoriaTotal = MemoriaTotalFormatado.substring(0, 5);
 
         Long MemoriaDisponivel = memoriaRam.getDisponivel();
         Double MemoriaDisponivelDouble = MemoriaDisponivel.doubleValue() / 1073741824.0;
         String MemoriaDisponivelFormatado = String.valueOf(MemoriaDisponivelDouble).replace(",", ".");
-        String formatMemoriaDisponivel = MemoriaDisponivelFormatado.substring(0, 5);
+       
 
         Long MemoriaEmUso = memoriaRam.getEmUso();
         Double MemoriaEmUsoDouble = MemoriaEmUso.doubleValue() / 1073741824.0;
         String MemoriaEmUsoFormatado = String.valueOf(MemoriaEmUsoDouble).replace(",", ".");
-        String formatMemoriaEmUso = MemoriaEmUsoFormatado.substring(0, 5);
+        
 
         Double memorioPorc = MemoriaTotalDouble / (MemoriaEmUso * 100);
         String memorioPorcFormatado = String.valueOf(memorioPorc).replace(",", ".");
-        String formatMemoriaPorc = memorioPorcFormatado.substring(0, 5);
+        
         Long TamanhoDisco = discoGrupo.getTamanhoTotal() / 1073741824;
          
         List<Disco> discos = discoGrupo.getDiscos();
@@ -219,10 +218,10 @@ public class ExecutavelInicial {
                         + "%s,%s,%s,%s,"
                         + "%s,%s,%s,'%s','%s',"
                         + "'%s',%d,%d,%d,%d,%s)",
-                        formatPorc, Cpuhz, TotalProcessos, ThreadsCpu,
-                        formatMemoriaTotal, formatMemoriaDisponivel, formatMemoriaEmUso, TamanhoDisco,
+                        processadorPorcFormatado, Cpuhz, TotalProcessos, ThreadsCpu,
+                        MemoriaTotalFormatado, MemoriaDisponivelFormatado, MemoriaEmUsoFormatado, TamanhoDisco,
                         LeituraDisco, EscritaDisco, TempoTransferencia, NomeRede, Hostname,
-                        NomeDeDominio, idTotem, fkEstabelecimento, fkConfigPC, fkMetricaAviso,formatMemoriaPorc
+                        NomeDeDominio, idTotem, fkEstabelecimento, fkConfigPC, fkMetricaAviso,MemoriaPorcFormatado
                 );
 
                 conAzure.update(dataAzure);
