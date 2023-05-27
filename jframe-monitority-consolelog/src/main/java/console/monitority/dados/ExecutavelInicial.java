@@ -80,17 +80,14 @@ public class ExecutavelInicial {
         
         Long TamanhoDisco = discoGrupo.getTamanhoTotal() / 1073741824;
          
-        List<Disco> discos = discoGrupo.getDiscos();
-        if (discos != null && !discos.isEmpty() && discos.size() > 0)) {
+        
+       
         Long LeituraDisco = discoGrupo.getDiscos().get(0).getLeituras();
         Long EscritaDisco = discoGrupo.getDiscos().get(0).getEscritas();
         Long TempoTransferencia = discoGrupo.getDiscos().get(0).getTempoDeTransferencia();
-        }
-         
-        List<InterfaceDeRede> interfacesDeRede = rede.getGrupoDeInterfaces().getInterfaces();
-        if (interfacesDeRede != null && !interfacesDeRede.isEmpty() && interfacesDeRede.size() > 1) {
+    
         String NomeRede = rede.getGrupoDeInterfaces().getInterfaces().get(1).getNome();
-        }
+        
          
         String Hostname = rede.getParametros().getHostName();
         String NomeDeDominio = rede.getParametros().getNomeDeDominio();
@@ -107,7 +104,6 @@ public class ExecutavelInicial {
         JdbcTemplate conMysql = conexaoBDMysql.getConexaoDoBancoMysql();
 
         Scanner leitor = new Scanner(System.in);
-        Console console = System.console();
         Boolean acessoPermitido = false;
 
         // Ve se existe o código do totem
@@ -221,7 +217,7 @@ public class ExecutavelInicial {
                         processadorPorcFormatado, Cpuhz, TotalProcessos, ThreadsCpu,
                         MemoriaTotalFormatado, MemoriaDisponivelFormatado, MemoriaEmUsoFormatado, TamanhoDisco,
                         LeituraDisco, EscritaDisco, TempoTransferencia, NomeRede, Hostname,
-                        NomeDeDominio, idTotem, fkEstabelecimento, fkConfigPC, fkMetricaAviso,MemoriaPorcFormatado
+                        NomeDeDominio, idTotem, fkEstabelecimento, fkConfigPC, fkMetricaAviso,memorioPorcFormatado
                 );
 
                 conAzure.update(dataAzure);
