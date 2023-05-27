@@ -86,7 +86,7 @@ public class ExecutavelInicial {
         Long EscritaDisco = discoGrupo.getDiscos().get(0).getEscritas();
         Long TempoTransferencia = discoGrupo.getDiscos().get(0).getTempoDeTransferencia();
     
-        String NomeRede = rede.getGrupoDeInterfaces().getInterfaces().get(1).getNome();
+        String NomeRede = rede.getGrupoDeInterfaces().getInterfaces().get(0).getNome();
         
          
         String Hostname = rede.getParametros().getHostName();
