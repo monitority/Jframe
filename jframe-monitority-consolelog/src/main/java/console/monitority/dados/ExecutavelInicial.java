@@ -40,7 +40,7 @@ public class ExecutavelInicial {
     private static Boolean acessoTotem = false;
     private static Integer fkEstabelecimento;
     private static Integer fkMetricaAviso;
-    private static Integer fkConfigPC;
+    
     private static Integer idTotem;
 
      public static void main(String[] args) {
@@ -118,7 +118,7 @@ public class ExecutavelInicial {
                     SerialNumber = true;
                     idTotem = totens.get(0).getIdTotem();
                     fkEstabelecimento = totens.get(0).getFkEstabelecimento();
-                    fkConfigPC = totens.get(0).getFkConfigPc();
+                    
                     
                 }
                 
@@ -213,11 +213,11 @@ public class ExecutavelInicial {
                         + "(%s,%d, %d, %d,"
                         + "%s,%s,%s,%s,"
                         + "%s,%s,%s,'%s','%s',"
-                        + "'%s',%d,%d,%d,%d,%s)",
+                        + "'%s',%d,%d,%d,%s)",
                         processadorPorcFormatado, Cpuhz, TotalProcessos, ThreadsCpu,
                         MemoriaTotalFormatado, MemoriaDisponivelFormatado, MemoriaEmUsoFormatado, TamanhoDisco,
                         LeituraDisco, EscritaDisco, TempoTransferencia, NomeRede, Hostname,
-                        NomeDeDominio, idTotem, fkEstabelecimento, fkConfigPC, fkMetricaAviso,memorioPorcFormatado
+                        NomeDeDominio, idTotem, fkEstabelecimento, fkMetricaAviso,memorioPorcFormatado
                 );
 
                 conAzure.update(dataAzure);
