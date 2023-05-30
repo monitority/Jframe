@@ -177,7 +177,7 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="185" max="32767" attributes="0"/>
+                      <EmptySpace pref="184" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -353,7 +353,7 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="178" max="32767" attributes="0"/>
+                      <EmptySpace pref="177" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -510,7 +510,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="140" max="32767" attributes="0"/>
+                      <EmptySpace pref="138" max="32767" attributes="0"/>
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
                   </Group>

@@ -40,7 +40,7 @@ public class DadosInterface extends javax.swing.JFrame {
     public Integer idTotem = 0;
     public Integer fkEstabelecimento = 0;
     public Integer fkMetricaAviso = 0;
-    public Integer fkConfigPc = 0;
+   
 
     public Boolean SerialNumber = false;
 
@@ -66,7 +66,7 @@ public class DadosInterface extends javax.swing.JFrame {
                 if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
                     idTotem = totens.get(0).getIdTotem();
                     fkEstabelecimento = totens.get(0).getFkEstabelecimento();
-                    fkConfigPc = totens.get(0).getFkConfigPc();
+                    
                     SerialNumber = true;
                     System.out.println(SerialNumber);
                     String forSelectEstabelecimento = String.format("select * from [dbo].[Estabelecimento] "
@@ -181,11 +181,11 @@ public class DadosInterface extends javax.swing.JFrame {
                             + "(%s,%d, %d, %d,"
                             + "%s,%s,%s,%s,"
                             + "%s,%s,%s,'%s','%s',"
-                            + "'%s',%d,%d,%d,%d,%s)",
+                            + "'%s',%d,%d,%d,%s)",
                             formatPorc, Cpuhz, TotalProcessos, ThreadsCpu,
                             formatMemoriaTotal, formatMemoriaDisponivel, formatMemoriaEmUso, TamanhoDisco,
                             LeituraDisco, EscritaDisco, TempoTransferencia, NomeRede, Hostname,
-                            NomeDeDominio, idTotem, fkEstabelecimento, fkConfigPc, fkMetricaAviso,formatMemorioPorc
+                            NomeDeDominio, idTotem, fkEstabelecimento, fkMetricaAviso,formatMemorioPorc
                     );
                     
                     conAzure.update(dataAzure);

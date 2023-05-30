@@ -10,4 +10,5 @@ classes\tabelas\Usuario.class
 jframe\monitority\dados\TelaLogin$1.class
 jframe\monitority\dados\TelaLogin.class
 bd\java\ConexaoBDAzure.class
+logMonitority\GerarLogMonitority.class
 bd\java\ConexaoBDMysql.class

@@ -17,6 +17,7 @@ import classes.tabelas.Usuario;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.processador.Processador;
 import jframe.monitority.dados.DadosInterface;
+import logMonitority.GerarLogMonitority;
 
 /**
  *
@@ -271,6 +272,7 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        GerarLogMonitority log = new GerarLogMonitority();//instanciar a classe de log
         TelaLogin login = new TelaLogin();
         Processador processadorCpu = looca.getProcessador();
         
@@ -284,7 +286,9 @@ public class TelaLogin extends javax.swing.JFrame {
                 if (empresa.getEmail().equals(email) && empresa.getSenha().equals(senha)) {
                     System.out.println("Esta logado");      
                     System.out.println(processadorCpu.getId());
+                    log.verificarNivelLog("info", "o usuario acessou empresa pelo email: " + email);
                     dadosInterface.setVisible(true);
+                    
                     this.dispose();
                     return;
                 }
@@ -296,6 +300,7 @@ public class TelaLogin extends javax.swing.JFrame {
             for (Usuario usuario : usuarios) {
                 if (usuario.getEmail().equals(email) && usuario.getSenha().equals(senha)) {
                     System.out.println("Esta logado");
+                    log.verificarNivelLog("info", "o usuario acessou o email: " + email);
                     dadosInterface.setVisible(true);
                     System.out.println(processadorCpu.getId());
                     this.dispose();
@@ -307,6 +312,7 @@ public class TelaLogin extends javax.swing.JFrame {
         }
         
         System.out.println("Não encontrado");
+        log.verificarNivelLog("error", "acesso de um usuário que não existe " + email);
 
     }//GEN-LAST:event_btnLoginActionPerformed
 
