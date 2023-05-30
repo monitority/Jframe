@@ -58,9 +58,9 @@ public class DadosInterface extends javax.swing.JFrame {
                 + "serialtotem ='%s'", TotemSerial);
         List<Totem> totens = conAzure.query(forSelectTotem,
                 new BeanPropertyRowMapper<>(Totem.class));
-
+        
         if (SerialNumber != true) {
-
+            System.out.println(processadorCpu.getId());
             try {
                 if (totens.get(0).getSerialTotem().equals(TotemSerial)) {
                     idTotem = totens.get(0).getIdTotem();
