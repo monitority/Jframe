@@ -75,13 +75,11 @@ public class ExecutavelInicial {
         String MemoriaEmUsoFormatado = String.valueOf(MemoriaEmUsoDouble).replace(",", ".");
         
 
-        Double memorioPorc = MemoriaTotalDouble / (MemoriaEmUso * 100);
+        Double memorioPorc = (MemoriaEmUsoDouble * 100) / MemoriaTotalDouble ;
         String memorioPorcFormatado = String.valueOf(memorioPorc).replace(",", ".");
         
         Long TamanhoDisco = discoGrupo.getTamanhoTotal() / 1073741824;
-         
-        
-       
+      
         Long LeituraDisco = discoGrupo.getDiscos().get(0).getLeituras();
         Long EscritaDisco = discoGrupo.getDiscos().get(0).getEscritas();
         Long TempoTransferencia = discoGrupo.getDiscos().get(0).getTempoDeTransferencia();
@@ -118,8 +116,6 @@ public class ExecutavelInicial {
                     SerialNumber = true;
                     idTotem = totens.get(0).getIdTotem();
                     fkEstabelecimento = totens.get(0).getFkEstabelecimento();
-                    
-                    
                 }
                 
                 if (SerialNumber) {
@@ -208,7 +204,7 @@ public class ExecutavelInicial {
                         + "(processadorPorc,cpuhz,totalProcessos,threadsCpu,"
                         + "memoriaTotal,memoriaDisponivel,memoriaEmUso,TamanhoDisco,"
                         + "LeituraDisco,EscritaDisco,TempoTransferencia,NomeRede,Hostname,"
-                        + "NomeDeDominio,fkTotem,fkEstabelecimento,fkConfigPC,fkMetricaAviso, memoriaPorc) "
+                        + "NomeDeDominio,fkTotem,fkEstabelecimento,fkMetricaAviso, memoriaPorc) "
                         + "values"
                         + "(%s,%d, %d, %d,"
                         + "%s,%s,%s,%s,"
@@ -236,7 +232,8 @@ public class ExecutavelInicial {
                         + "TempoTransferencia,"
                         + "NomeRede,"
                         + "Hostname,"
-                        + "NomeDeDominio)"
+                        + "NomeDeDominio,"
+                        + "memorioPorcFormatado)"
                         + " values ("
                         + "%s,"
                         + "%s,"
@@ -251,7 +248,8 @@ public class ExecutavelInicial {
                         + "%s,"
                         + "'%s',"
                         + "'%s',"
-                        + "'%s')",
+                        + "'%s',"
+                        + "%s)",
                         processadorPorc,
                         Cpuhz,
                         TotalProcessos,
@@ -265,8 +263,10 @@ public class ExecutavelInicial {
                         TempoTransferencia,
                         NomeRede,
                         Hostname,
-                        NomeDeDominio
+                        NomeDeDominio,
+                        memorioPorcFormatado
                 );
+                
                 conMysql.update(dataSql);
                 List<Dados> totens = conMysql.query("select * from Dados",
                         new BeanPropertyRowMapper<>(Dados.class));

@@ -41,7 +41,6 @@ public class DadosInterface extends javax.swing.JFrame {
     public Integer fkEstabelecimento = 0;
     public Integer fkMetricaAviso = 0;
    
-
     public Boolean SerialNumber = false;
 
     public DadosInterface() {
@@ -120,21 +119,17 @@ public class DadosInterface extends javax.swing.JFrame {
                     Long MemoriaTotal = memoriaRam.getTotal();
                     Double MemoriaTotalDouble = MemoriaTotal.doubleValue() / 1073741824.0;
                     String MemoriaTotalFormatado = String.valueOf(MemoriaTotalDouble).replace(",", ".");
-                    String formatMemoriaTotal = MemoriaTotalFormatado.substring(0, 4);
 
                     Long MemoriaDisponivel = memoriaRam.getDisponivel();
                     Double MemoriaDisponivelDouble = MemoriaDisponivel.doubleValue()/ 1073741824.0;
                     String MemoriaDisponivelFormatado = String.valueOf(MemoriaDisponivelDouble).replace(",", ".");
-                    String formatMemoriaDisponivel = MemoriaDisponivelFormatado.substring(0, 4);
 
                     Long MemoriaEmUso = memoriaRam.getEmUso();
                     Double MemoriaEmUsoDouble = MemoriaEmUso.doubleValue()/ 1073741824.0;
                     String MemoriaEmUsoFormatado = String.valueOf(MemoriaEmUsoDouble).replace(",", ".");
-                    String formatMemoriaEmUso = MemoriaEmUsoFormatado.substring(0, 4);
                     
-                    Double memorioPorc = MemoriaTotalDouble / (MemoriaEmUso * 100);
+                    Double memorioPorc = (MemoriaEmUsoDouble * 100) / MemoriaTotalDouble ;
                     String memorioPorcFormatado = String.valueOf(memorioPorc).replace(",", ".");
-                    String formatMemorioPorc = memorioPorcFormatado.substring(0, 4);
                     // Memória
                     lblTotalMemoriaRamValue.setText(String.format("▶ %.2f GB",
                             MemoriaTotalDouble));
@@ -176,16 +171,16 @@ public class DadosInterface extends javax.swing.JFrame {
                             + "(processadorPorc,cpuhz,totalProcessos,threadsCpu,"
                             + "memoriaTotal,memoriaDisponivel,memoriaEmUso,TamanhoDisco,"
                             + "LeituraDisco,EscritaDisco,TempoTransferencia,NomeRede,Hostname,"
-                            + "NomeDeDominio,fkTotem,fkEstabelecimento,fkConfigPC,fkMetricaAviso,memoriaPorc) "
+                            + "NomeDeDominio,fkTotem,fkEstabelecimento,fkMetricaAviso,memoriaPorc) "
                             + "values"
                             + "(%s,%d, %d, %d,"
                             + "%s,%s,%s,%s,"
                             + "%s,%s,%s,'%s','%s',"
                             + "'%s',%d,%d,%d,%s)",
                             formatPorc, Cpuhz, TotalProcessos, ThreadsCpu,
-                            formatMemoriaTotal, formatMemoriaDisponivel, formatMemoriaEmUso, TamanhoDisco,
+                            MemoriaTotalFormatado, MemoriaDisponivelFormatado, MemoriaEmUsoFormatado, TamanhoDisco,
                             LeituraDisco, EscritaDisco, TempoTransferencia, NomeRede, Hostname,
-                            NomeDeDominio, idTotem, fkEstabelecimento, fkMetricaAviso,formatMemorioPorc
+                            NomeDeDominio, idTotem, fkEstabelecimento, fkMetricaAviso,memorioPorcFormatado
                     );
                     
                     conAzure.update(dataAzure);
@@ -236,7 +231,7 @@ public class DadosInterface extends javax.swing.JFrame {
                             NomeRede,
                             Hostname,
                             NomeDeDominio,
-                            formatMemorioPorc
+                            memorioPorcFormatado
                     );
                     conMysql.update(dataSql);
                 }
