@@ -87,7 +87,7 @@ public class DadosInterface extends javax.swing.JFrame {
                 @Override
                 public void run() {
                     Sistema sistema = looca.getSistema();
-                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    
 
                     // Dados que vamos receber dos seguintes Objetos:
                     Memoria memoriaRam = looca.getMemoria();

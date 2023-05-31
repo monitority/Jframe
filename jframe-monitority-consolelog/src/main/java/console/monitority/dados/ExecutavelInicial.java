@@ -106,13 +106,14 @@ public class ExecutavelInicial {
 
         // Ve se existe o código do totem
         do {
-            String forSelectTotem = String.format("select * from [dbo].[totem] where serialtotem ='%s'", TotemSerial);
+            
+            String forSelectTotem = String.format("select * from [dbo].[totem] where serialTotem ='%s'", TotemSerial);
 
             List<Totem> totens = conAzure.query(forSelectTotem,
                     new BeanPropertyRowMapper<>(Totem.class));
-
+            System.out.println(totens);
             try {
-                if (!totens.isEmpty() && totens.get(0).getSerialTotem().equals(TotemSerial)) {
+                if (!totens.isEmpty() || totens.get(0).getSerialTotem().equals(TotemSerial)) {
                     SerialNumber = true;
                     idTotem = totens.get(0).getIdTotem();
                     fkEstabelecimento = totens.get(0).getFkEstabelecimento();
@@ -123,11 +124,11 @@ public class ExecutavelInicial {
                         + "where idEstabelecimento ='%d'", totens.get(0).getFkEstabelecimento());
                 List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
                         new BeanPropertyRowMapper<>(Estabelecimento.class));
-                if (!estabelecimentos.isEmpty()) {
-                    fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
-                    }
-                }
                 
+                    fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
+                    
+                }
+                System.out.println("aqui");
 
             } catch (IndexOutOfBoundsException e) {
                 if (acessoTotem == false) {
@@ -159,9 +160,8 @@ public class ExecutavelInicial {
 
                         }
                     }
-                    return;
                 }
-                return;
+                System.out.println("aqui");
             }
         } while (SerialNumber == false);
 
@@ -195,7 +195,7 @@ public class ExecutavelInicial {
         } while (acessoPermitido != true);
 
         if (acessoPermitido == true) {
-        }
+        
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -277,7 +277,7 @@ public class ExecutavelInicial {
 
             }
         }, 0, 10000);
-
+     }
     }
 
 }
