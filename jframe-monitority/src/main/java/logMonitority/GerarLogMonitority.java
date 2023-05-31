@@ -17,7 +17,7 @@ import java.util.Date;
  */
 public class GerarLogMonitority {
     private static final Integer tamanhoMaximoArquivo = 1024 * 1024; // Tamanho máximo do arquivo de log em bytes 1.025 KB
-    private static String nomeArquivo = "Desktop/arquivo";
+    private static String nomeArquivo = "arquivo";
     private static final String datatime = "yyyy-MM-dd HH:mm:ss";
 
     //nivel contextual de nivel que futuramente só iremos ultilizar um
