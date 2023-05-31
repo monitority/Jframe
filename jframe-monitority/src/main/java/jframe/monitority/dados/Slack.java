@@ -31,4 +31,9 @@ public class Slack {
         System.out.println(String.format("Response: %s", response.body()));
     }
     
+    public static void main(String[] args) throws IOException, InterruptedException {
+        JSONObject json = new JSONObject();
+        json.put("text", " ");
+        Slack.sendMessage(json);
+    }
 }
