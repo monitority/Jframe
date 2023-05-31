@@ -274,7 +274,7 @@ public class DadosInterface extends javax.swing.JFrame {
                     );
                     conMysql.update(dataSql);
                 }
-            }, 0,10000);
+            }, 0,4000);
         }
     }
 
