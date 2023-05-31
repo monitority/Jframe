@@ -234,7 +234,7 @@ public class ExecutavelInicial {
                         + "NomeRede,"
                         + "Hostname,"
                         + "NomeDeDominio,"
-                        + "memorioPorcFormatado)"
+                        + "memorioPorc)"
                         + " values ("
                         + "%s,"
                         + "%s,"
