@@ -8,6 +8,7 @@ import classes.tabelas.Totem;
 import classes.tabelas.Dados;
 import classes.tabelas.Empresa;
 import classes.tabelas.Estabelecimento;
+import classes.tabelas.Metricas;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import com.github.britooo.looca.api.core.Looca;
@@ -19,11 +20,15 @@ import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
 import com.github.britooo.looca.api.group.janelas.JanelaGrupo;
 import com.github.britooo.looca.api.group.dispositivos.DispositivosUsbGrupo;
+import java.io.IOException;
 import java.util.List;
 import java.text.DecimalFormat;
 
 import java.util.Timer;
+import org.json.JSONObject;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -40,6 +45,9 @@ public class DadosInterface extends javax.swing.JFrame {
     public Integer idTotem = 0;
     public Integer fkEstabelecimento = 0;
     public Integer fkMetricaAviso = 0;
+    
+    public Double memoriaPorcMax;
+    public Double cpuPorcMax;
    
     public Boolean SerialNumber = false;
 
@@ -73,8 +81,15 @@ public class DadosInterface extends javax.swing.JFrame {
 
                     List<Estabelecimento> estabelecimentos = conAzure.query(forSelectEstabelecimento,
                             new BeanPropertyRowMapper<>(Estabelecimento.class));
-
+                      String forSelectCpuMemPorMax = String.format("select \n"
+                            + "memoriaRAMPorcMax,\n"
+                            + "cpuPorcMax\n"
+                            + "from [dbo].[metricaAviso] where idMetricaAviso = '%d'\n", fkMetricaAviso);
                     fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
+                    List<Metricas> metricas = conAzure.query(forSelectCpuMemPorMax,
+                            new BeanPropertyRowMapper<>(Metricas.class));
+                    cpuPorcMax = metricas.get(0).getCpuPorcMax();
+                    memoriaPorcMax = metricas.get(0).getMemoriaRAMPorcMax();
                 }
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("Totem não listado");
@@ -182,6 +197,30 @@ public class DadosInterface extends javax.swing.JFrame {
                             LeituraDisco, EscritaDisco, TempoTransferencia, NomeRede, Hostname,
                             NomeDeDominio, idTotem, fkEstabelecimento, fkMetricaAviso,memorioPorcFormatado
                     );
+                    
+                      if (processadorPorc > cpuPorcMax) {
+                        JSONObject json = new JSONObject();
+                        json.put("text", "Processamento ultrapassou as métricas definidas.");
+                        try {
+                            Slack.sendMessage(json);
+                        } catch (IOException ex) {
+                            Logger.getLogger(DadosInterface.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(DadosInterface.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                   
+                    if (MemoriaEmUsoDouble > memoriaPorcMax) {
+                        JSONObject json = new JSONObject();
+                        json.put("text", "Uso de Memória ultrapassou as métricas definidas.");
+                        try {
+                            Slack.sendMessage(json);
+                        } catch (IOException ex) {
+                            Logger.getLogger(DadosInterface.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(DadosInterface.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     
                     conAzure.update(dataAzure);
 
