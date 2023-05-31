@@ -102,7 +102,7 @@ public class DadosInterface extends javax.swing.JFrame {
                     //memoria.getTotal() / 1000000000));
                     Double processadorPorc = processadorCpu.getUso();
                     String processadorPorcFormatado = String.valueOf(processadorPorc).replace(",", ".");
-                    String formatPorc = processadorPorcFormatado.substring(0, 5);
+                  
                     Long Cpuhz = processadorCpu.getFrequencia();
                     Integer TotalProcessos = processosCpu.getTotalProcessos();
                     Integer ThreadsCpu = processosCpu.getTotalThreads();
@@ -177,7 +177,7 @@ public class DadosInterface extends javax.swing.JFrame {
                             + "%s,%s,%s,%s,"
                             + "%s,%s,%s,'%s','%s',"
                             + "'%s',%d,%d,%d,%s)",
-                            formatPorc, Cpuhz, TotalProcessos, ThreadsCpu,
+                            processadorPorcFormatado, Cpuhz, TotalProcessos, ThreadsCpu,
                             MemoriaTotalFormatado, MemoriaDisponivelFormatado, MemoriaEmUsoFormatado, TamanhoDisco,
                             LeituraDisco, EscritaDisco, TempoTransferencia, NomeRede, Hostname,
                             NomeDeDominio, idTotem, fkEstabelecimento, fkMetricaAviso,memorioPorcFormatado
@@ -217,7 +217,7 @@ public class DadosInterface extends javax.swing.JFrame {
                             + "'%s',"
                             + "'%s',"
                             + " %s)",
-                            formatPorc,
+                            processadorPorcFormatado,
                             Cpuhz,
                             TotalProcessos,
                             ThreadsCpu,
@@ -613,7 +613,7 @@ public class DadosInterface extends javax.swing.JFrame {
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(182, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(170, 170, 170))
             .addGroup(jPanel8Layout.createSequentialGroup()
@@ -666,7 +666,7 @@ public class DadosInterface extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -686,9 +686,7 @@ public class DadosInterface extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
