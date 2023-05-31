@@ -8,6 +8,7 @@ import classes.tabelas.Totem;
 import classes.tabelas.Dados;
 import classes.tabelas.Empresa;
 import classes.tabelas.Estabelecimento;
+import classes.tabelas.Metricas;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import com.github.britooo.looca.api.core.Looca;
@@ -19,7 +20,9 @@ import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
 import com.github.britooo.looca.api.group.janelas.JanelaGrupo;
 import com.github.britooo.looca.api.group.dispositivos.DispositivosUsbGrupo;
+import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 import java.text.DecimalFormat;
 
 import java.util.Timer;
