@@ -17,7 +17,7 @@ import java.util.Date;
  */
 public class GerarLogMonitority {
     private static final Integer tamanhoMaximoArquivo = 1024 * 1024; // Tamanho máximo do arquivo de log em bytes 1.025 KB
-    private static String nomeArquivo = "C:/Users/Samsung/Desktop/PI/3ºsemestre (ADS)/logMonitority/arquivoLog";
+    private static String nomeArquivo = "Desktop/";
     private static final String datatime = "yyyy-MM-dd HH:mm:ss";
 
     //nivel contextual de nivel que futuramente só iremos ultilizar um
@@ -25,7 +25,7 @@ public class GerarLogMonitority {
     private static final Integer nivelMedio = 2;
     private static final Integer nivelErro = 3;
 
-    private static Integer nivelLog = nivelErro;//<---- aaqui eu preciso mudar para nível erro ou não preciso chamar nada.
+    private static Integer nivelLog = nivelMedio;///<---- aaqui eu preciso mudar para nível erro ou não preciso chamar nada.
     private static BufferedWriter writer; //inserir uma nova linha após cada mensagem de log.
     private static long tamanhoAtualLog;
     
