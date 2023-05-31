@@ -111,11 +111,12 @@ public class ExecutavelInicial {
 
             List<Totem> totens = conAzure.query(forSelectTotem,
                     new BeanPropertyRowMapper<>(Totem.class));
-            System.out.println(totens);
+         
             try {
                 if (!totens.isEmpty() || totens.get(0).getSerialTotem().equals(TotemSerial)) {
                     SerialNumber = true;
                     idTotem = totens.get(0).getIdTotem();
+            
                     fkEstabelecimento = totens.get(0).getFkEstabelecimento();
                 }
                 
@@ -128,7 +129,7 @@ public class ExecutavelInicial {
                     fkMetricaAviso = estabelecimentos.get(0).getFkMetricaAviso();
                     
                 }
-                System.out.println("aqui");
+    
 
             } catch (IndexOutOfBoundsException e) {
                 if (acessoTotem == false) {
@@ -161,7 +162,7 @@ public class ExecutavelInicial {
                         }
                     }
                 }
-                System.out.println("aqui");
+       
             }
         } while (SerialNumber == false);
 
