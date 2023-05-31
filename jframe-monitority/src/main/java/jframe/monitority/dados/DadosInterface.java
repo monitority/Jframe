@@ -105,7 +105,6 @@ public class DadosInterface extends javax.swing.JFrame {
                     //memoria.getTotal() / 1000000000));
                     Double processadorPorc = processadorCpu.getUso();
                     String processadorPorcFormatado = String.valueOf(processadorPorc).replace(",", ".");
-                    String formatPorc = processadorPorcFormatado.substring(0, 5);
                     Long Cpuhz = processadorCpu.getFrequencia();
                     Integer TotalProcessos = processosCpu.getTotalProcessos();
                     Integer ThreadsCpu = processosCpu.getTotalThreads();
@@ -180,7 +179,7 @@ public class DadosInterface extends javax.swing.JFrame {
                             + "%s,%s,%s,%s,"
                             + "%s,%s,%s,'%s','%s',"
                             + "'%s',%d,%d,%d,%s)",
-                            formatPorc, Cpuhz, TotalProcessos, ThreadsCpu,
+                            processadorPorcFormatado, Cpuhz, TotalProcessos, ThreadsCpu,
                             MemoriaTotalFormatado, MemoriaDisponivelFormatado, MemoriaEmUsoFormatado, TamanhoDisco,
                             LeituraDisco, EscritaDisco, TempoTransferencia, NomeRede, Hostname,
                             NomeDeDominio, idTotem, fkEstabelecimento, fkMetricaAviso,memorioPorcFormatado
@@ -220,7 +219,7 @@ public class DadosInterface extends javax.swing.JFrame {
                             + "'%s',"
                             + "'%s',"
                             + " %s)",
-                            formatPorc,
+                            processadorPorcFormatado,
                             Cpuhz,
                             TotalProcessos,
                             ThreadsCpu,
