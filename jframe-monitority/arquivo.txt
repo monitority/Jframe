@@ -1,0 +1,1 @@
+2023-06-13 20:02:26 [error] acesso de um usuário que não existe admin
