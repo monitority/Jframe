@@ -38,6 +38,9 @@ public class DadosInterface extends javax.swing.JFrame {
 
     private ConexaoBDAzure conexaoBDAzure = new ConexaoBDAzure();
     private JdbcTemplate conAzure = conexaoBDAzure.getConexaoDoBancoAzure();
+    
+    private ConexaoBDMysql conexaoBDMysql = new ConexaoBDMysql();
+    private JdbcTemplate conMySql = conexaoBDMysql.getConexaoDoBancoMysql();
 
     public Integer idTotem = 0;
     public Integer fkEstabelecimento = 0;
@@ -220,7 +223,56 @@ public class DadosInterface extends javax.swing.JFrame {
                     }
                     
                     conAzure.update(dataAzure);
-
+                    
+                    String dataSql = String.format("Insert into Dados("
+                            + "processadorPorc,"
+                            + "cpuhz,"
+                            + "totalProcessos,"
+                            + "threadsCpu,"
+                            + "memoriaTotal,"
+                            + "memoriaDisponivel,"
+                            + "memoriaEmUso,"
+                            + "TamanhoDisco,"
+                            + "LeituraDisco,"
+                            + "EscritaDisco,"
+                            + "TempoTransferencia,"
+                            + "NomeRede,"
+                            + "Hostname,"
+                            + "NomeDeDominio,"
+                            + "memoriaPorc)"
+                            + " values ("
+                            + "%s,"
+                            + "%s,"
+                            + "%d,"
+                            + "%d,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%s,"
+                            + "%d,"
+                            + "'%s',"
+                            + "'%s',"
+                            + "'%s',"
+                            + " %s)",
+                            processadorPorcFormatado,
+                            Cpuhz,
+                            TotalProcessos,
+                            ThreadsCpu,
+                            MemoriaTotal,
+                            MemoriaDisponivel,
+                            MemoriaEmUso,
+                            TamanhoDisco,
+                            LeituraDisco,
+                            EscritaDisco,
+                            TempoTransferencia,
+                            NomeRede,
+                            Hostname,
+                            NomeDeDominio,
+                            memorioPorcFormatado
+                    );
+                    conMySql.update(dataSql);
                    
                 }
             }, 0,4000);
